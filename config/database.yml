@@ -1,0 +1,17 @@
+default: &default
+  adapter: postgis
+  encoding: utf8
+  username: postgres
+  password: password
+  pool: 5 # not mandatory
+  timeout: 5000 # not mandatory
+  # host: localhost
+  host: db
+  port: 5432
+
+test:
+  <<: *default
+  database: dockerized-rails_test
+development:
+  <<: *default
+  database: dockerized-rails_development
