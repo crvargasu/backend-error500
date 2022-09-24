@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @lessor %>
+
+<div>
+  <%= link_to "Edit this lessor", edit_lessor_path(@lessor) %> |
+  <%= link_to "Back to lessors", lessors_path %>
+
+  <%= button_to "Destroy this lessor", @lessor, method: :delete %>
+</div>

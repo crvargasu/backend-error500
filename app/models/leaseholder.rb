@@ -1,0 +1,2 @@
+class Leaseholder < ApplicationRecord
+end

@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @leaseholder %>
+
+<div>
+  <%= link_to "Edit this leaseholder", edit_leaseholder_path(@leaseholder) %> |
+  <%= link_to "Back to leaseholders", leaseholders_path %>
+
+  <%= button_to "Destroy this leaseholder", @leaseholder, method: :delete %>
+</div>
