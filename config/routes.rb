@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  resources :admins
+  resources :reviews
+  resources :rental_agreements
   resources :leaseholders
   resources :lessors
   resources :users

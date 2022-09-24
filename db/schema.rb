@@ -10,10 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_24_162202) do
+ActiveRecord::Schema[7.0].define(version: 2022_09_24_185023) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "postgis"
+
+  create_table "admins", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "leaseholders", force: :cascade do |t|
     t.string "property_account"
@@ -30,6 +35,21 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_24_162202) do
   create_table "lessors", force: :cascade do |t|
     t.integer "credit"
     t.integer "mean_reviews"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "rental_agreements", force: :cascade do |t|
+    t.datetime "timestamp_start", precision: nil
+    t.datetime "timestamp_end", precision: nil
+    t.boolean "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "reviews", force: :cascade do |t|
+    t.integer "score"
+    t.text "comment"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
