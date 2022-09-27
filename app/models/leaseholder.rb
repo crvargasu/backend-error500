@@ -1,2 +1,2 @@
-class Leaseholder < ApplicationRecord
+class Leaseholder < User
 end

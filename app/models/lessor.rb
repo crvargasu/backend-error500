@@ -1,2 +1,2 @@
-class Lessor < ApplicationRecord
+class Lessor < User
 end
