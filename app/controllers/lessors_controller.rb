@@ -66,6 +66,6 @@ class LessorsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def lessor_params
-      params.require(:lessor).permit(:credit, :mean_reviews)
+      params.require(:lessor).permit(:credit, :mean_reviews, :name, :picture, :phone, :email, :street, :city)
     end
 end
