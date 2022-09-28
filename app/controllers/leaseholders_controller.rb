@@ -4,6 +4,7 @@ class LeaseholdersController < ApplicationController
   # GET /leaseholders or /leaseholders.json
   def index
     @leaseholders = Leaseholder.all
+    render json: @leaseholders
   end
 
   # GET /leaseholders/1 or /leaseholders/1.json
@@ -65,6 +66,6 @@ class LeaseholdersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def leaseholder_params
-      params.require(:leaseholder).permit(:property_account, :polygon, :mean_reviews, :credit, :status, :id_picture_front, :id_picture_back)
+      params.require(:leaseholder).permit(:user_id, :property_account, :polygon, :mean_reviews, :credit, :status, :id_picture_front, :id_picture_back)
     end
 end

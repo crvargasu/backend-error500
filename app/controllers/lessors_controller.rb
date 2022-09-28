@@ -9,6 +9,7 @@ class LessorsController < ApplicationController
 
   # GET /lessors/1 or /lessors/1.json
   def show
+    render json: @lessor
   end
 
   # GET /lessors/new
@@ -66,6 +67,6 @@ class LessorsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def lessor_params
-      params.require(:lessor).permit(:credit, :mean_reviews, :name, :picture, :phone, :email, :street, :city)
+      params.require(:lessor).permit(:credit, :mean_reviews, :user_id)
     end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_27_151802) do
+ActiveRecord::Schema[7.0].define(version: 2022_09_27_235559) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "postgis"
@@ -30,6 +30,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_27_151802) do
     t.string "id_picture_back"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_leaseholders_on_user_id"
   end
 
   create_table "lessors", force: :cascade do |t|
@@ -37,6 +39,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_27_151802) do
     t.integer "mean_reviews"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_lessors_on_user_id"
   end
 
   create_table "rental_agreements", force: :cascade do |t|
@@ -71,6 +75,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_27_151802) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "leaseholders", "users"
+  add_foreign_key "lessors", "users"
   add_foreign_key "rental_agreements", "leaseholders"
   add_foreign_key "rental_agreements", "lessors"
   add_foreign_key "reviews", "leaseholders"
