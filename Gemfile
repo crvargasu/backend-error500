@@ -10,6 +10,7 @@ gem "rails", "~> 7.0.4"
 gem "sprockets-rails"
 
 gem "pg"
+gem 'rack-cors'
 
 gem 'activerecord-postgis-adapter'
 # Use the Puma web server [https://github.com/puma/puma]
