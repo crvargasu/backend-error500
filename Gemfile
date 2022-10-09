@@ -11,6 +11,7 @@ gem "sprockets-rails"
 
 gem 'devise'
 gem 'devise-jwt'
+gem 'dotenv-rails', groups: [:development, :test]
 gem "pg"
 gem 'rack-cors'
 
