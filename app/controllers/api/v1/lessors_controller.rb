@@ -17,10 +17,12 @@ class Api::V1::LessorsController < ApplicationController
   # POST /api/v1/lessors
   # POST /api/v1/lessors.json
   def create
+    print("create")
+    print(api_v1_lessor_params)
     @api_v1_lessor = Api::V1::Lessor.new(api_v1_lessor_params)
 
     if @api_v1_lessor.save
-      render :show, status: :created, location: @api_v1_lessor
+      render json: @api_v1_lessor
     else
       render json: @api_v1_lessor.errors, status: :unprocessable_entity
     end
@@ -50,6 +52,6 @@ class Api::V1::LessorsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def api_v1_lessor_params
-      params.require(:api_v1_lessor).permit(:title, :content)
+      params.require(:api_v1_lessor).permit(:credit, :mean_reviews, :user_id)
     end
 end
