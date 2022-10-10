@@ -1,12 +1,16 @@
 Rails.application.routes.draw do
-  resources :admins
-  resources :reviews
-  resources :rental_agreements
-  resources :leaseholders
-  resources :lessors
-  resources :users
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Defines the root path route ("/")
-  # root "articles#index"
+  namespace :api do
+    namespace :v1 do
+      resources :admins
+      resources :reviews
+      resources :rental_agreements
+      resources :leaseholders
+      resources :lessors
+    end
+  end
+  devise_for :users,
+              controllers: {
+                  sessions: 'users/sessions',
+                  registrations: 'users/registrations'
+              }
 end
