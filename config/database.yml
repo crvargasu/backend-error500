@@ -15,5 +15,4 @@ development:
   <<: *default
   database: dockerized-rails_development
 production:
-  <<: *default
-  database: <%= ENV['DATABASE_NAME']%>
+  url: <%= ENV['DATABASE_URL']%>
