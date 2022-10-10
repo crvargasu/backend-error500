@@ -12,7 +12,7 @@ services:
     environment:
       DATABASE_PASSWORD: password
       DATABASE_USER: postgres
-      DATABASE_HOST: db
+      DATABASE_URL: db
     volumes:
       - .:/myapp
     depends_on:
