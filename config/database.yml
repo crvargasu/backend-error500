@@ -15,4 +15,4 @@ development:
   <<: *default
   database: dockerized-rails_development
 production:
-  url: <%= ENV['DATABASE_URL']%>
+  url: <%= ENV.fetch('DATABASE_URL', '').sub(/^postgres/, "postgis")%>
