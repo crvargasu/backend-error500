@@ -1,11 +1,12 @@
 default: &default
   adapter: postgis
   encoding: utf8
-  username: <%= ENV['DATABASE_USER']%>
-  password: <%= ENV['DATABASE_PASSWORD']%>
-  host: <%= ENV['DATABASE_URL']%>
+  username: postgres
+  password: password
   pool: 5 # not mandatory
   timeout: 5000 # not mandatory
+  host: localhost
+  # host: db
   port: 5432
 
 test:
