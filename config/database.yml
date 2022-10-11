@@ -1,12 +1,11 @@
 default: &default
   adapter: postgis
   encoding: utf8
-  username: postgres
-  password: password
+  username: <%= ENV['DATABASE_USER']%>
+  password: <%= ENV['DATABASE_PASSWORD']%>
+  host: <%= ENV['DATABASE_URL']%>
   pool: 5 # not mandatory
   timeout: 5000 # not mandatory
-  # host: localhost
-  host: db
   port: 5432
 
 test:
@@ -15,3 +14,5 @@ test:
 development:
   <<: *default
   database: dockerized-rails_development
+production:
+  url: <%= ENV.fetch('DATABASE_URL', '').sub(/^postgres/, "postgis")%>
