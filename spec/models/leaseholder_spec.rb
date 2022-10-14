@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Api::V1::Leaseholder, type: :model do
+RSpec.describe Leaseholder, type: :model do
   describe 'Attributes' do
     it { should respond_to :property_account }
     it { should respond_to :polygon }
@@ -14,7 +14,7 @@ RSpec.describe Api::V1::Leaseholder, type: :model do
 
   describe 'Associations' do
     it { should belong_to(:user) }
-    # it { should have_many(:reviews) }
-    # it { should have_many(:rental_agreements) }
+    it { should have_many(:reviews) }
+    it { should have_many(:rental_agreements) }
   end
 end

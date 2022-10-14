@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Api::V1::Lessor, type: :model do
+RSpec.describe Lessor, type: :model do
   describe 'Attributes' do
     it { should respond_to :credit }
     it { should respond_to :mean_reviews }
@@ -10,6 +10,6 @@ RSpec.describe Api::V1::Lessor, type: :model do
 
   describe 'Associations' do
     it { should belong_to(:user) }
-    # it { should have_many(:rental_agreements) }
+    it { should have_many(:rental_agreements) }
   end
 end
