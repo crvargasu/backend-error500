@@ -5,7 +5,7 @@ class Api::V1::ReviewsController < ApplicationController
   # GET /api/v1/reviews
   # GET /api/v1/reviews.json
   def index
-    @api_v1_reviews = Api::V1::Review.all
+    @api_v1_reviews = Review.all
     render json: @api_v1_reviews
   end
 
@@ -17,7 +17,7 @@ class Api::V1::ReviewsController < ApplicationController
   # POST /api/v1/reviews
   # POST /api/v1/reviews.json
   def create
-    @api_v1_review = Api::V1::Review.new(api_v1_review_params)
+    @api_v1_review = Review.new(api_v1_review_params)
 
     if @api_v1_review.save
       render :show, status: :created, location: @api_v1_review
@@ -43,13 +43,14 @@ class Api::V1::ReviewsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_api_v1_review
-      @api_v1_review = Api::V1::Review.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def api_v1_review_params
-      params.require(:api_v1_review).permit(:title, :content)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_api_v1_review
+    @api_v1_review = Review.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def api_v1_review_params
+    params.require(:api_v1_review).permit(:title, :content)
+  end
 end
