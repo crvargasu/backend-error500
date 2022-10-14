@@ -5,7 +5,7 @@ class Api::V1::RentalAgreementsController < ApplicationController
   # GET /api/v1/rental_agreements
   # GET /api/v1/rental_agreements.json
   def index
-    @api_v1_rental_agreements = Api::V1::RentalAgreement.all
+    @api_v1_rental_agreements = RentalAgreement.all
     render json: @api_v1_rental_agreements
   end
 
@@ -17,7 +17,7 @@ class Api::V1::RentalAgreementsController < ApplicationController
   # POST /api/v1/rental_agreements
   # POST /api/v1/rental_agreements.json
   def create
-    @api_v1_rental_agreement = Api::V1::RentalAgreement.new(api_v1_rental_agreement_params)
+    @api_v1_rental_agreement = RentalAgreement.new(api_v1_rental_agreement_params)
 
     if @api_v1_rental_agreement.save
       render :show, status: :created, location: @api_v1_rental_agreement
@@ -45,7 +45,7 @@ class Api::V1::RentalAgreementsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_api_v1_rental_agreement
-      @api_v1_rental_agreement = Api::V1::RentalAgreement.find(params[:id])
+      @api_v1_rental_agreement = RentalAgreement.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
