@@ -1,6 +1,6 @@
 class CreateApiV1Leaseholders < ActiveRecord::Migration[7.0]
   def change
-    create_table :api_v1_leaseholders do |t|
+    create_table :leaseholders do |t|
       t.string :property_account
       t.st_polygon :polygon
       t.integer :mean_reviews

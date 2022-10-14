@@ -5,7 +5,7 @@ class Api::V1::LeaseholdersController < ApplicationController
   # GET /api/v1/leaseholders
   # GET /api/v1/leaseholders.json
   def index
-    @api_v1_leaseholders = Api::V1::Leaseholder.all
+    @api_v1_leaseholders = Leaseholder.all
     render json: @api_v1_leaseholders
   end
 
@@ -17,7 +17,7 @@ class Api::V1::LeaseholdersController < ApplicationController
   # POST /api/v1/leaseholders
   # POST /api/v1/leaseholders.json
   def create
-    @api_v1_leaseholder = Api::V1::Leaseholder.new(api_v1_leaseholder_params)
+    @api_v1_leaseholder = Leaseholder.new(api_v1_leaseholder_params)
 
     if @api_v1_leaseholder.save
       render :show, status: :created, location: @api_v1_leaseholder
@@ -45,7 +45,7 @@ class Api::V1::LeaseholdersController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_api_v1_leaseholder
-      @api_v1_leaseholder = Api::V1::Leaseholder.find(params[:id])
+      @api_v1_leaseholder = Leaseholder.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.

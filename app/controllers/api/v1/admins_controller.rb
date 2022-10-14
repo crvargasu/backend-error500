@@ -5,7 +5,7 @@ class Api::V1::AdminsController < ApplicationController
   # GET /api/v1/admins
   # GET /api/v1/admins.json
   def index
-    @api_v1_admins = Api::V1::Admin.all
+    @api_v1_admins = Admin.all
     render json: @api_v1_admins
   end
 
@@ -17,7 +17,7 @@ class Api::V1::AdminsController < ApplicationController
   # POST /api/v1/admins
   # POST /api/v1/admins.json
   def create
-    @api_v1_admin = Api::V1::Admin.new(api_v1_admin_params)
+    @api_v1_admin = Admin.new(api_v1_admin_params)
 
     if @api_v1_admin.save
       render :show, status: :created, location: @api_v1_admin
@@ -45,7 +45,7 @@ class Api::V1::AdminsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_api_v1_admin
-      @api_v1_admin = Api::V1::Admin.find(params[:id])
+      @api_v1_admin = Admin.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
