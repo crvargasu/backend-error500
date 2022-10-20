@@ -1,5 +1,5 @@
 class Api::V1::LeaseholdersController < ApplicationController
-  before_action :set_api_v1_leaseholder, only: %i[ show update destroy ]
+  ActionController::Parameters.permit_all_parameters = true
   before_action :authenticate_user!
 
   # GET /api/v1/leaseholders
@@ -12,6 +12,13 @@ class Api::V1::LeaseholdersController < ApplicationController
   # GET /api/v1/leaseholders/1
   # GET /api/v1/leaseholders/1.json
   def show
+    if(Leaseholder.where(user_id: params[:id]).exists?)
+      leaseholder = Leaseholder.where(user_id: params[:id])[0]
+      user = User.find(params[:id])
+      render json: {"user": user, "other": leaseholder}, status: :ok
+    else
+      render json: { message: "Leaseholder not found."}, status: :not_found
+    end
   end
 
   # POST /api/v1/leaseholders
@@ -29,10 +36,14 @@ class Api::V1::LeaseholdersController < ApplicationController
   # PATCH/PUT /api/v1/leaseholders/1
   # PATCH/PUT /api/v1/leaseholders/1.json
   def update
-    if @api_v1_leaseholder.update(api_v1_leaseholder_params)
-      render :show, status: :ok, location: @api_v1_leaseholder
+    if(Leaseholder.where(user_id: params[:id]).exists?)
+      @leaseholder = Leaseholder.where(user_id: params[:id])[0]
+      @leaseholder.update(params[:other])
+      @user = User.find(params[:id])
+      @user.update(params[:user])
+      render json: {"user": @user, "other": @leaseholder}, status: :ok
     else
-      render json: @api_v1_leaseholder.errors, status: :unprocessable_entity
+      render json: { message: "Leaseholder not found."}, status: :not_found
     end
   end
 
