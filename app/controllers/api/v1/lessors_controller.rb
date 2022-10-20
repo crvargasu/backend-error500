@@ -1,6 +1,6 @@
 class Api::V1::LessorsController < ApplicationController
+  ActionController::Parameters.permit_all_parameters = true
   before_action :authenticate_user!
-  before_action :set_api_v1_lessor, only: %i[ show update destroy ]
 
   # GET /api/v1/lessors
   # GET /api/v1/lessors.json
@@ -12,6 +12,13 @@ class Api::V1::LessorsController < ApplicationController
   # GET /api/v1/lessors/1
   # GET /api/v1/lessors/1.json
   def show
+    if(Lessor.where(user_id: params[:id]).exists?)
+      lessor = Lessor.where(user_id: params[:id])[0]
+      user = User.find(params[:id])
+      render json: {"user": user, "other": lessor}, status: :ok
+    else
+      render json: { message: "Lessor not found."}, status: :not_found
+    end
   end
 
   # POST /api/v1/lessors
@@ -31,10 +38,14 @@ class Api::V1::LessorsController < ApplicationController
   # PATCH/PUT /api/v1/lessors/1
   # PATCH/PUT /api/v1/lessors/1.json
   def update
-    if @api_v1_lessor.update(api_v1_lessor_params)
-      render :show, status: :ok, location: @api_v1_lessor
+    if(Lessor.where(user_id: params[:id]).exists?)
+      @lessor = Lessor.where(user_id: params[:id])[0]
+      @lessor.update(params[:other])
+      @user = User.find(params[:id])
+      @user.update(params[:user])
+      render json: {"user": @user, "other": @lessor}, status: :ok
     else
-      render json: @api_v1_lessor.errors, status: :unprocessable_entity
+      render json: { message: "Lessor not found."}, status: :not_found
     end
   end
 
