@@ -47,6 +47,21 @@ class Api::V1::LeaseholdersController < ApplicationController
     end
   end
 
+  def polygon
+    if(Leaseholder.where(user_id: params[:id]).exists?)
+      leaseholder = Leaseholder.where(user_id: params[:id])[0]
+      render json: { polygon: leaseholder.polygon }, status: :ok
+    else
+      render json: { message: "Leaseholder not found."}, status: :not_found
+    end
+  end
+
+  def polygons
+    @leaseholders = Leaseholder.all
+    polygons = @leaseholders.map { |leaseholder| leaseholder.polygon } 
+    render json: { polygons: polygons }, status: :ok
+  end
+
   # DELETE /api/v1/leaseholders/1
   # DELETE /api/v1/leaseholders/1.json
   def destroy
