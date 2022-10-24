@@ -15,7 +15,7 @@ class Users::SessionsController < Devise::SessionsController
         render json: {"user": current_user, "other": lessor[0]}, status: :ok
       end
       if(Leaseholder.where(user_id: current_user.id).exists?)
-        leaseholder = Lessor.where(user_id: current_user.id)
+        leaseholder = Leaseholder.where(user_id: current_user.id)
         render json: {"user": current_user, "other": leaseholder[0]}, status: :ok
       end
     end

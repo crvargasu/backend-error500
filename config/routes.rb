@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       resources :rental_agreements
       resources :leaseholders
       resources :lessors
+      get 'me', to: 'user#me'
     end
   end
   devise_for :users,
