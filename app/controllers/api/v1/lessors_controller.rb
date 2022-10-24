@@ -24,8 +24,6 @@ class Api::V1::LessorsController < ApplicationController
   # POST /api/v1/lessors
   # POST /api/v1/lessors.json
   def create
-    print("create")
-    print(api_v1_lessor_params)
     @api_v1_lessor = Lessor.new(api_v1_lessor_params)
 
     if @api_v1_lessor.save
