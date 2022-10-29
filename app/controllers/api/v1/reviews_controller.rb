@@ -20,7 +20,8 @@ class Api::V1::ReviewsController < ApplicationController
     @api_v1_review = Review.new(api_v1_review_params)
 
     if @api_v1_review.save
-      render :show, status: :created, location: @api_v1_review
+      response = { result: 'Review success' }
+      render json: response, status: :created
     else
       render json: @api_v1_review.errors, status: :unprocessable_entity
     end
