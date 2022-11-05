@@ -18,9 +18,10 @@ class Api::V1::RentalAgreementsController < ApplicationController
   # POST /api/v1/rental_agreements.json
   def create
     @api_v1_rental_agreement = RentalAgreement.new(api_v1_rental_agreement_params)
+    @api_v1_rental_agreement.status = false
 
     if @api_v1_rental_agreement.save
-      render :show, status: :created, location: @api_v1_rental_agreement
+      render json: { result: 'Rental Agreement created' }, status: :created
     else
       render json: @api_v1_rental_agreement.errors, status: :unprocessable_entity
     end
@@ -43,13 +44,16 @@ class Api::V1::RentalAgreementsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_api_v1_rental_agreement
-      @api_v1_rental_agreement = RentalAgreement.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def api_v1_rental_agreement_params
-      params.require(:api_v1_rental_agreement).permit(:title, :content)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_api_v1_rental_agreement
+    @api_v1_rental_agreement = RentalAgreement.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def api_v1_rental_agreement_params
+    params.require(:api_v1_rental_agreement).permit(
+      :timestamp_start, :lessor_id, :leaseholder_id, :reasons, :offer_price
+    )
+  end
 end
