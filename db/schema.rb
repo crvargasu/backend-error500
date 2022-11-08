@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_10_041256) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_05_204246) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "postgis"
@@ -52,11 +52,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_10_041256) do
   create_table "rental_agreements", force: :cascade do |t|
     t.datetime "timestamp_start", precision: nil
     t.datetime "timestamp_end", precision: nil
-    t.boolean "status"
+    t.integer "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "lessor_id", null: false
     t.bigint "leaseholder_id", null: false
+    t.string "reasons"
+    t.decimal "offer_price"
     t.index ["leaseholder_id"], name: "index_rental_agreements_on_leaseholder_id"
     t.index ["lessor_id"], name: "index_rental_agreements_on_lessor_id"
   end
