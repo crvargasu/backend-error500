@@ -46,3 +46,16 @@ end
         "user_id": number
         )
 end
+
+(1..5).each do |number|
+
+    RentalAgreement.create(
+        "timestamp_start": "2021-01-01 00:00:00",
+        "timestamp_end": "2021-01-01 23:00:00",
+        "status": number%3,
+        "lessor_id": number+5,
+        "leaseholder_id": number,
+        "reasons": "reasons for the rental agreement",
+        "offer_price": 1000,
+        )
+end
