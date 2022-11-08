@@ -3,7 +3,7 @@ class CreateApiV1RentalAgreements < ActiveRecord::Migration[7.0]
     create_table :rental_agreements do |t|
       t.timestamp :timestamp_start
       t.timestamp :timestamp_end
-      t.boolean :status
+      t.integer :status
 
       t.timestamps
     end
