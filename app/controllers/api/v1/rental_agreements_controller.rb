@@ -13,10 +13,12 @@ class Api::V1::RentalAgreementsController < ApplicationController
   def pending_rental_agreements
     if(Leaseholder.where(user_id: params[:id]).exists?)
       leaseholder = Leaseholder.where(user_id: params[:id])[0]
-      agreements = RentalAgreement.where(leaseholder_id: leaseholder.id, status: "pending")
+      agreements = RentalAgreement.where(leaseholder_id: leaseholder.user_id, status: "pending")
       render json: {"RentalAgreements": agreements}, status: :ok
     else
-      render json: { message: "Leaseholder not found."}, status: :not_found
+      lessor = Lessor.where(user_id: params[:id])[0]
+      agreements = RentalAgreement.where(lessor_id: lessor.user_id, status: "pending")
+      render json: {"RentalAgreements": agreements}, status: :ok
     end
   end
 
@@ -34,10 +36,12 @@ class Api::V1::RentalAgreementsController < ApplicationController
   def user_rental_agreements
     if(Leaseholder.where(user_id: params[:id]).exists?)
       leaseholder = Leaseholder.where(user_id: params[:id])[0]
-      agreements = RentalAgreement.where(leaseholder_id: leaseholder.id)
+      agreements = RentalAgreement.where(leaseholder_id: leaseholder.user_id)
       render json: {"RentalAgreements": agreements}, status: :ok
     else
-      render json: { message: "Leaseholder not found."}, status: :not_found
+      lessor = Lessor.where(user_id: params[:id])[0]
+      agreements = RentalAgreement.where(lessor_id: lessor.user_id)
+      render json: {"RentalAgreements": agreements}, status: :ok
     end
   end
 
