@@ -28,7 +28,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_05_204246) do
 
   create_table "leaseholders", force: :cascade do |t|
     t.string "property_account"
-    t.geometry "polygon", limit: {:srid=>0, :type=>"st_polygon"}
+    t.text "description"
+    t.integer "capacity"
+    t.integer "highlimit"
+    t.string "polygon"
+    t.integer "area"
+    t.string "center"
     t.integer "mean_reviews"
     t.integer "credit"
     t.boolean "status"

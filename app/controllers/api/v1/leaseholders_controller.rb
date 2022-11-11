@@ -15,7 +15,7 @@ class Api::V1::LeaseholdersController < ApplicationController
     if(Leaseholder.where(user_id: params[:id]).exists?)
       leaseholder = Leaseholder.where(user_id: params[:id])[0]
       user = User.find(params[:id])
-      render json: {"user": user, "other": leaseholder}, status: :ok
+      render json: {"user": user, "other":  leaseholder}, status: :ok
     else
       render json: { message: "Leaseholder not found."}, status: :not_found
     end
@@ -24,6 +24,7 @@ class Api::V1::LeaseholdersController < ApplicationController
   # POST /api/v1/leaseholders
   # POST /api/v1/leaseholders.json
   def create
+    params[:other]
     @api_v1_leaseholder = Leaseholder.new(api_v1_leaseholder_params)
 
     if @api_v1_leaseholder.save
