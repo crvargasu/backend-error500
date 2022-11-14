@@ -49,10 +49,57 @@ RSpec.describe 'RentalAgreements', type: :request do
         it 'return status 200' do
           expect(response).to have_http_status(:ok)
         end
+      end
+    end
+  end
+  describe 'PUT /api/v1/rental_agreements/pending/approve' do
+    let(:user) { create(:user) }
+    let(:auth) { auth_headers(user) }
+    let!(:rental_agreement) { create(:rental_agreement, status: 'pending') }
 
-        # it 'returns a rental_agreement' do
-        #   puts response.body
-        # end
+    context 'when logged in' do
+      before do
+        params = {
+          api_v1_rental_agreement: {
+            user_id: user.id,
+            rental_agreement_id: rental_agreement.id
+          }
+        }
+        put '/api/v1/rental_agreements/pending/approve', headers: auth, params: params.to_json
+        rental_agreement.reload
+      end
+
+      it 'should change status to approved' do
+        expect(rental_agreement.status).to eq('approved')
+      end
+
+      it 'should return ok status' do
+        expect(response).to have_http_status(:ok)
+      end
+    end
+  end
+  describe 'DELETE /api/v1/rental_agreements/pending/delete' do
+    let(:user) { create(:user) }
+    let(:auth) { auth_headers(user) }
+    let!(:rental_agreement) { create(:rental_agreement, status: 'pending') }
+
+    context 'when logged in' do
+      before do
+        params = {
+          api_v1_rental_agreement: {
+            user_id: user.id,
+            rental_agreement_id: rental_agreement.id
+          }
+        }
+        delete '/api/v1/rental_agreements/pending/delete', headers: auth, params: params.to_json
+      end
+
+      it 'should change status to approved' do
+        expect(RentalAgreement.exists?(rental_agreement.id)).to eq(false)
+      end
+
+      it 'should return ok status' do
+        expect(response).to have_http_status(:ok)
       end
     end
   end
