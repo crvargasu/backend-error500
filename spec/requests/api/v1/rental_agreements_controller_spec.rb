@@ -56,4 +56,27 @@ RSpec.describe 'RentalAgreements', type: :request do
       end
     end
   end
+  describe 'GET /api/v1/rental_agreements/pending/:id' do
+    let(:user) { create(:user) }
+    let(:auth) { auth_headers(user) }
+
+    let!(:leaseholder) { create(:leaseholder, user: user) }
+    let!(:rental_agreement) { create(:rental_agreement, leaseholder: leaseholder, status: 'pending') }
+
+    describe 'HTTP Request' do
+      context 'when logged in' do
+        before do
+          get "/api/v1/rental_agreements/pending/#{user.id}", headers: auth
+        end
+
+        it 'return status 200' do
+          expect(response).to have_http_status(:ok)
+        end
+
+        # it 'returns a rental_agreement' do
+        #   puts response.body
+        # end
+      end
+    end
+  end
 end
