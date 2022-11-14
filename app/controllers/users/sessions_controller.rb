@@ -12,11 +12,13 @@ class Users::SessionsController < Devise::SessionsController
     def log_in_success
       if(Lessor.where(user_id: current_user.id).exists?)
         lessor = Lessor.where(user_id: current_user.id)
-        render json: {"user": current_user, "other": lessor[0]}, status: :ok
+        render json: {"user": current_user.attributes.merge( :type => 'lessor'),
+          "other": lessor[0]}, status: :ok
       end
       if(Leaseholder.where(user_id: current_user.id).exists?)
         leaseholder = Leaseholder.where(user_id: current_user.id)
-        render json: {"user": current_user, "other": leaseholder[0]}, status: :ok
+        render json: {"user": current_user.attributes.merge( :type => 'leaseholder'),
+          "other": leaseholder[0]}, status: :ok
       end
     end
 
