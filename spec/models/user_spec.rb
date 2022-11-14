@@ -11,6 +11,7 @@ RSpec.describe User, type: :model do
   end
 
   describe 'Associations' do
-    # Add associations if pertinent
+    it { should have_one(:leaseholder) }
+    it { should have_one(:lessor) }
   end
 end
