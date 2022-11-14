@@ -6,7 +6,7 @@ class Api::V1::LeaseholdersController < ApplicationController
   # GET /api/v1/leaseholders.json
   def index
     @api_v1_leaseholders = Leaseholder.all
-    render json: @api_v1_leaseholders
+    render json: @api_v1_leaseholders.to_json( :include => [:user] )
   end
 
   # GET /api/v1/leaseholders/1

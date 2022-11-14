@@ -6,7 +6,7 @@ class Api::V1::LessorsController < ApplicationController
   # GET /api/v1/lessors.json
   def index
     @api_v1_lessors = Lessor.all
-    render json: @api_v1_lessors
+    render json: @api_v1_lessors.to_json( :include => [:user] )
   end
 
   # GET /api/v1/lessors/1
