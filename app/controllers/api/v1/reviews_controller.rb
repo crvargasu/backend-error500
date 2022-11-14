@@ -17,10 +17,23 @@ class Api::V1::ReviewsController < ApplicationController
   # POST /api/v1/reviews
   # POST /api/v1/reviews.json
   def create
-    @api_v1_review = Review.new(api_v1_review_params)
+    @user = User.find(api_v1_review_params[:user_id])
+    @leaseholder = @user.leaseholder
+
+    if @leaseholder.nil?
+      render json: { result: 'Este usuario no es leaseholder' }, status: :unprocessable_entity
+      return
+    end
+
+    @api_v1_review = Review.new(
+      score: api_v1_review_params[:score],
+      comment: api_v1_review_params[:comment],
+      leaseholder_id: @leaseholder.id
+    )
 
     if @api_v1_review.save
-      render :show, status: :created, location: @api_v1_review
+      response = { result: 'Review success' }
+      render json: response, status: :created
     else
       render json: @api_v1_review.errors, status: :unprocessable_entity
     end
@@ -51,6 +64,6 @@ class Api::V1::ReviewsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def api_v1_review_params
-    params.require(:api_v1_review).permit(:title, :content)
+    params.require(:api_v1_review).permit(:score, :comment, :leaseholder_id, :user_id)
   end
 end

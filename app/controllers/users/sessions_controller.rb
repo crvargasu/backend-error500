@@ -6,17 +6,19 @@ class Users::SessionsController < Devise::SessionsController
     end
 
     def respond_to_on_destroy
-      current_user ? log_out_success : log_out_failure
+      current_user ? log_out_failure : log_out_success
     end
 
     def log_in_success
       if(Lessor.where(user_id: current_user.id).exists?)
         lessor = Lessor.where(user_id: current_user.id)
-        render json: {"user": current_user, "other": lessor[0]}, status: :ok
+        render json: {"user": current_user.attributes.merge( :type => 'lessor'),
+          "other": lessor[0]}, status: :ok
       end
       if(Leaseholder.where(user_id: current_user.id).exists?)
-        leaseholder = Lessor.where(user_id: current_user.id)
-        render json: {"user": current_user, "other": leaseholder[0]}, status: :ok
+        leaseholder = Leaseholder.where(user_id: current_user.id)
+        render json: {"user": current_user.attributes.merge( :type => 'leaseholder'),
+          "other": leaseholder[0]}, status: :ok
       end
     end
 

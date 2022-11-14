@@ -6,7 +6,7 @@ class Api::V1::LessorsController < ApplicationController
   # GET /api/v1/lessors.json
   def index
     @api_v1_lessors = Lessor.all
-    render json: @api_v1_lessors
+    render json: @api_v1_lessors.to_json( :include => [:user] )
   end
 
   # GET /api/v1/lessors/1
@@ -24,8 +24,6 @@ class Api::V1::LessorsController < ApplicationController
   # POST /api/v1/lessors
   # POST /api/v1/lessors.json
   def create
-    print("create")
-    print(api_v1_lessor_params)
     @api_v1_lessor = Lessor.new(api_v1_lessor_params)
 
     if @api_v1_lessor.save

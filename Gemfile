@@ -13,6 +13,7 @@ gem 'devise'
 gem 'devise-jwt', '~> 0.10.0'
 gem 'dry-configurable', '~> 0.16.0'
 gem 'jwt', '~> 2.5.0'
+gem 'pry'
 gem 'warden-jwt_auth', '~> 0.7.0'
 
 gem "pg"
