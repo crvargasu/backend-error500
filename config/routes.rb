@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       resources :rental_agreements
       get 'rental_agreements/user/:id', to: 'rental_agreements#user_rental_agreements'
       get 'rental_agreements/pending/:id', to: 'rental_agreements#pending_rental_agreements'
+      put 'rental_agreements/pending/approve', to: 'rental_agreements#approve_rental_agreement'
       resources :leaseholders
       resources :lessors
       get 'me', to: 'user#me'
