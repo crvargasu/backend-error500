@@ -77,7 +77,20 @@ class Api::V1::RentalAgreementsController < ApplicationController
     if agreement.update(status: 'approved')
       render json: { message: 'Rental agreement approved' }, status: :ok
     else
-      render json: { message: 'An error has occurred' }, status: :bad_request
+      render json: { message: 'Rental agreement could not be updated' }, status: :bad_request
+    end
+  end
+
+  def reject_rental_agreement
+    return render json: { message: 'Id usuario no presente' }, status: :bad_request if params['api_v1_rental_agreement']['user_id'].blank?
+    return render json: { message: 'Id acuerdo no presente' }, status: :bad_request if params['api_v1_rental_agreement']['rental_agreement_id'].blank?
+
+    agreement = RentalAgreement.find(params['api_v1_rental_agreement']['rental_agreement_id'])
+
+    if agreement.destroy
+      render json: { message: 'Rental agreement destroyed' }, status: :ok
+    else
+      render json: { message: 'Rental agreement could not be destroyed' }, status: :bad_request
     end
   end
 
