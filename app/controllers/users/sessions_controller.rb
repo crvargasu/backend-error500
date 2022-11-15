@@ -17,11 +17,11 @@ class Users::SessionsController < Devise::SessionsController
       render json: { "user": current_user.attributes.merge(type: 'lessor'),
                      "other": lessor[0] }, status: :ok
     end
-    if Leaseholder.where(user_id: current_user.id).exists?
-      leaseholder = Leaseholder.where(user_id: current_user.id)
-      render json: { "user": current_user.attributes.merge(type: 'leaseholder'),
-                     "other": leaseholder[0] }, status: :ok
-    end
+    return unless Leaseholder.where(user_id: current_user.id).exists?
+
+    leaseholder = Leaseholder.where(user_id: current_user.id)
+    render json: { "user": current_user.attributes.merge(type: 'leaseholder'),
+                   "other": leaseholder[0] }, status: :ok
   end
 
   def log_in_failure
