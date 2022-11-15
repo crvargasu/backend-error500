@@ -33,7 +33,7 @@ RSpec.describe 'RentalAgreements', type: :request do
       end
     end
   end
-  describe 'GET /api/v1/rental_agreements/pending/:id' do
+  describe 'GET /api/v1/rental_agreements/pending/:id with leaseholder' do
     let(:user) { create(:user) }
     let(:auth) { auth_headers(user) }
 
@@ -44,6 +44,63 @@ RSpec.describe 'RentalAgreements', type: :request do
       context 'when logged in' do
         before do
           get "/api/v1/rental_agreements/pending/#{user.id}", headers: auth
+        end
+
+        it 'return status 200' do
+          expect(response).to have_http_status(:ok)
+        end
+      end
+    end
+  end
+  describe 'GET /api/v1/rental_agreements/pending/:id with lessor' do
+    let(:user) { create(:user) }
+    let(:auth) { auth_headers(user) }
+
+    let!(:lessor) { create(:lessor, user: user) }
+    let!(:rental_agreement) { create(:rental_agreement, lessor: lessor, status: 'pending') }
+
+    describe 'HTTP Request' do
+      context 'when logged in' do
+        before do
+          get "/api/v1/rental_agreements/pending/#{user.id}", headers: auth
+        end
+
+        it 'return status 200' do
+          expect(response).to have_http_status(:ok)
+        end
+      end
+    end
+  end
+  describe 'GET /api/v1/rental_agreements/user/:id with leaseholder' do
+    let(:user) { create(:user) }
+    let(:auth) { auth_headers(user) }
+
+    let!(:leaseholder) { create(:leaseholder, user: user) }
+    let!(:rental_agreement) { create(:rental_agreement, leaseholder: leaseholder, status: 'pending') }
+
+    describe 'HTTP Request' do
+      context 'when logged in' do
+        before do
+          get "/api/v1/rental_agreements/user/#{user.id}", headers: auth
+        end
+
+        it 'return status 200' do
+          expect(response).to have_http_status(:ok)
+        end
+      end
+    end
+  end
+  describe 'GET /api/v1/rental_agreements/user/:id with lessor' do
+    let(:user) { create(:user) }
+    let(:auth) { auth_headers(user) }
+
+    let!(:lessor) { create(:lessor, user: user) }
+    let!(:rental_agreement) { create(:rental_agreement, lessor: lessor, status: 'pending') }
+
+    describe 'HTTP Request' do
+      context 'when logged in' do
+        before do
+          get "/api/v1/rental_agreements/user/#{user.id}", headers: auth
         end
 
         it 'return status 200' do
@@ -123,6 +180,38 @@ RSpec.describe 'RentalAgreements', type: :request do
         # it 'returns a rental_agreement' do
         #   puts response.body
         # end
+      end
+    end
+  end
+  describe 'GET /api/v1/rental_agreements/:id' do
+    let(:user) { create(:user) }
+    let(:auth) { auth_headers(user) }
+
+    let!(:rental_agreement) { create(:rental_agreement) }
+
+    describe 'HTTP Request' do
+      context 'when there is rental agreement' do
+        before do
+          get "/api/v1/rental_agreements/#{rental_agreement.id}", headers: auth
+        end
+
+        it 'return status 200' do
+          expect(response).to have_http_status(:ok)
+        end
+
+        it 'should return rental agreement' do
+          parsed_response = JSON.parse(response.body)
+          expect(parsed_response['RentalAgreement']['id']).to eq(rental_agreement.id)
+        end
+      end
+      context 'when there is no rental agreement' do
+        before do
+          get '/api/v1/rental_agreements/a', headers: auth
+        end
+
+        it 'return status 200' do
+          expect(response).to have_http_status(:not_found)
+        end
       end
     end
   end
