@@ -2,7 +2,7 @@ name: "Deploy To Heroku Server"
 
 on:
   push:
-    branches: [ main ]
+    branches: [ development ]
 jobs:
   build:
     runs-on: ubuntu-latest
