@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'LeaseholdersController', type: :request do
+RSpec.describe 'LeaseholdersController', type: :request do # rubocop:disable Metrics/BlockLength
   describe 'GET /api/v1/leaseholders' do
     let(:user) { create(:user) }
     let(:auth) { auth_headers(user) }
@@ -23,7 +23,7 @@ RSpec.describe 'LeaseholdersController', type: :request do
     end
   end
 
-  describe 'GET /api/v1/leaseholders/:id' do
+  describe 'GET /api/v1/leaseholders/:id' do # rubocop:disable Metrics/BlockLength
     let(:user1) { create(:user) }
     let(:auth1) { auth_headers(user1) }
 
@@ -63,7 +63,7 @@ RSpec.describe 'LeaseholdersController', type: :request do
     end
   end
 
-  describe 'PUT /api/v1/leaseholders/:id' do
+  describe 'PUT /api/v1/leaseholders/:id' do # rubocop:disable Metrics/BlockLength
     let(:user) { create(:user) }
     let(:auth) { auth_headers(user) }
     let!(:leaseholder) { create(:leaseholder, capacity: 50, user: user) }

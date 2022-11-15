@@ -1,7 +1,13 @@
-require "test_helper"
+# frozen_string_literal: true
 
-class Api::V1::ReviewTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+require 'test_helper'
+
+module Api
+  module V1
+    class ReviewTest < ActiveSupport::TestCase
+      # test "the truth" do
+      #   assert true
+      # end
+    end
+  end
 end
