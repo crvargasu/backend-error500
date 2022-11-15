@@ -7,7 +7,11 @@ class Api::V1::RentalAgreementsController < ApplicationController
   # GET /api/v1/rental_agreements.json
   def index
     @api_v1_rental_agreements = RentalAgreement.all
-    render json: @api_v1_rental_agreements
+    render json: @api_v1_rental_agreements.to_json(:include => { 
+      :leaseholder => {:include =>:user},
+      :lessor => {:include =>:user},
+    }
+    )
   end
 
   def pending_rental_agreements
@@ -37,11 +41,11 @@ class Api::V1::RentalAgreementsController < ApplicationController
     if(Leaseholder.where(user_id: params[:id]).exists?)
       leaseholder = Leaseholder.where(user_id: params[:id])[0]
       agreements = RentalAgreement.where(leaseholder_id: leaseholder.user_id)
-      render json: {"RentalAgreements": agreements}, status: :ok
+      render json: {"RentalAgreements": agreements, "leaseholder": leaseholder.attributes.merge( :user => leaseholder.user)}, status: :ok
     else
       lessor = Lessor.where(user_id: params[:id])[0]
       agreements = RentalAgreement.where(lessor_id: lessor.user_id)
-      render json: {"RentalAgreements": agreements}, status: :ok
+      render json: {"RentalAgreements": agreements, "lessor": lessor.attributes.merge( :user => lessor.user)}, status: :ok
     end
   end
 
