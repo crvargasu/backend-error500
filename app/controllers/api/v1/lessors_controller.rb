@@ -50,6 +50,7 @@ class Api::V1::LessorsController < ApplicationController
   # DELETE /api/v1/lessors/1
   # DELETE /api/v1/lessors/1.json
   def destroy
+    @api_v1_lessor = Lessor.find(params[:id])
     @api_v1_lessor.destroy
   end
 
