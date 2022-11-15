@@ -25,7 +25,7 @@ module Api
           lessor = Lessor.where(user_id: params[:id])[0]
           agreements = RentalAgreement.where(lessor_id: lessor.user_id, status: 'pending')
         end
-        render json: { "RentalAgreements": agreements }, status: :ok
+        render json: { RentalAgreements: agreements }, status: :ok
       end
 
       # GET /api/v1/rental_agreements/1
@@ -33,7 +33,7 @@ module Api
       def show
         if RentalAgreement.where(id: params[:id]).exists?
           agreement = RentalAgreement.where(id: params[:id])[0]
-          render json: { "RentalAgreement": agreement }, status: :ok
+          render json: { RentalAgreement: agreement }, status: :ok
         else
           render json: { message: 'Rental Agreement not found.' }, status: :not_found
         end
@@ -43,12 +43,12 @@ module Api
         if Leaseholder.where(user_id: params[:id]).exists?
           leaseholder = Leaseholder.where(user_id: params[:id])[0]
           agreements = RentalAgreement.where(leaseholder_id: leaseholder.user_id)
-          render json: { "RentalAgreements": agreements, "leaseholder": leaseholder.attributes.merge(user: leaseholder.user) },
+          render json: { RentalAgreements: agreements, leaseholder: leaseholder.attributes.merge(user: leaseholder.user) },
                  status: :ok
         else
           lessor = Lessor.where(user_id: params[:id])[0]
           agreements = RentalAgreement.where(lessor_id: lessor.user_id)
-          render json: { "RentalAgreements": agreements, "lessor": lessor.attributes.merge(user: lessor.user) },
+          render json: { RentalAgreements: agreements, lessor: lessor.attributes.merge(user: lessor.user) },
                  status: :ok
         end
       end

@@ -9,10 +9,10 @@ module Api
       def me
         if Lessor.where(user_id: current_user.id).exists?
           lessor = Lessor.where(user_id: current_user.id)[0]
-          render json: { "user": current_user, "other": lessor }, status: :ok
+          render json: { user: current_user, other: lessor }, status: :ok
         else
           leaseholder = Leaseholder.where(user_id: current_user.id)[0]
-          render json: { "user": current_user, "other": leaseholder }, status: :ok
+          render json: { user: current_user, other: leaseholder }, status: :ok
         end
       end
     end

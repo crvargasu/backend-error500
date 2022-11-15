@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'ReviewsController', type: :request do
+RSpec.describe 'ReviewsController', type: :request do # rubocop:disable Metrics/BlockLength
   describe 'GET /api/v1/reviews' do
     let(:user) { create(:user) }
     let(:auth) { auth_headers(user) }
@@ -23,7 +23,7 @@ RSpec.describe 'ReviewsController', type: :request do
     end
   end
 
-  describe 'POST /api/v1/reviews' do
+  describe 'POST /api/v1/reviews' do # rubocop:disable Metrics/BlockLength
     let(:user) { create(:user) }
     let(:auth) { auth_headers(user) }
     let!(:leaseholder) { create(:leaseholder, user: user) }

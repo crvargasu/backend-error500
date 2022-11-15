@@ -25,49 +25,49 @@ points = ['[{lat:-33.4163761 , lng: -70.5515917}]',
 
 (1..20).each do |number|
   User.create(
-    "email": "myemail#{number}@email.com",
-    "password": 'mypassword',
-    "name": 'name',
-    "picture": 'picture',
-    "street": 'street',
-    "city": 'city'
+    email: "myemail#{number}@email.com",
+    password: 'mypassword',
+    name: 'name',
+    picture: 'picture',
+    street: 'street',
+    city: 'city'
   )
 end
 
 (1..5).each do |number|
   Leaseholder.create(
-    "property_account": 'link',
-    "polygon": polygons[number - 1],
-    "center": points[number - 1],
-    "area": 4,
-    "mean_reviews": 0,
-    "description": 'mi estacionamiento',
-    "capacity": 2,
-    "highlimit": 10_000,
-    "credit": 0,
-    "status": true,
-    "id_picture_front": 'link',
-    "id_picture_back": 'link',
-    "user_id": number
+    property_account: 'link',
+    polygon: polygons[number - 1],
+    center: points[number - 1],
+    area: 4,
+    mean_reviews: 0,
+    description: 'mi estacionamiento',
+    capacity: 2,
+    highlimit: 10_000,
+    credit: 0,
+    status: true,
+    id_picture_front: 'link',
+    id_picture_back: 'link',
+    user_id: number
   )
 end
 
 (5..20).each do |number|
   Lessor.create(
-    "credit": 0,
-    "mean_reviews": 0,
-    "user_id": number
+    credit: 0,
+    mean_reviews: 0,
+    user_id: number
   )
 end
 
 (1..5).each do |number|
   RentalAgreement.create(
-    "timestamp_start": '2021-01-01 00:00:00',
-    "timestamp_end": '2021-01-01 23:00:00',
-    "status": number % 3,
-    "lessor_id": number + 5,
-    "leaseholder_id": number,
-    "reasons": 'reasons for the rental agreement',
-    "offer_price": 1000
+    timestamp_start: '2021-01-01 00:00:00',
+    timestamp_end: '2021-01-01 23:00:00',
+    status: number % 3,
+    lessor_id: number + 5,
+    leaseholder_id: number,
+    reasons: 'reasons for the rental agreement',
+    offer_price: 1000
   )
 end

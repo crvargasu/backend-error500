@@ -19,7 +19,7 @@ module Api
         if Leaseholder.where(user_id: params[:id]).exists?
           leaseholder = Leaseholder.where(user_id: params[:id])[0]
           user = User.find(params[:id])
-          render json: { "user": user, "other": leaseholder }, status: :ok
+          render json: { user: user, other: leaseholder }, status: :ok
         else
           render json: { message: 'Leaseholder not found.' }, status: :not_found
         end
@@ -46,7 +46,7 @@ module Api
           @leaseholder.update(params[:other])
           @user = User.find(params[:id])
           @user.update(params[:user])
-          render json: { "user": @user, "other": @leaseholder }, status: :ok
+          render json: { user: @user, other: @leaseholder }, status: :ok
         else
           render json: { message: 'Leaseholder not found.' }, status: :not_found
         end
