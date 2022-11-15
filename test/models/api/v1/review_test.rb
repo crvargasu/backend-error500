@@ -1,4 +1,4 @@
-require "test_helper"
+require 'test_helper'
 
 class Api::V1::ReviewTest < ActiveSupport::TestCase
   # test "the truth" do

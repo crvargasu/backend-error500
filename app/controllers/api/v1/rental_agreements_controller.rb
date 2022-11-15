@@ -7,45 +7,46 @@ class Api::V1::RentalAgreementsController < ApplicationController
   # GET /api/v1/rental_agreements.json
   def index
     @api_v1_rental_agreements = RentalAgreement.all
-    render json: @api_v1_rental_agreements.to_json(:include => { 
-      :leaseholder => {:include =>:user},
-      :lessor => {:include =>:user},
-    }
-    )
+    render json: @api_v1_rental_agreements.to_json(include: {
+                                                     leaseholder: { include: :user },
+                                                     lessor: { include: :user }
+                                                   })
   end
 
   def pending_rental_agreements
-    if(Leaseholder.where(user_id: params[:id]).exists?)
+    if Leaseholder.where(user_id: params[:id]).exists?
       leaseholder = Leaseholder.where(user_id: params[:id])[0]
-      agreements = RentalAgreement.where(leaseholder_id: leaseholder.user_id, status: "pending")
-      render json: {"RentalAgreements": agreements}, status: :ok
+      agreements = RentalAgreement.where(leaseholder_id: leaseholder.user_id, status: 'pending')
+      render json: { "RentalAgreements": agreements }, status: :ok
     else
       lessor = Lessor.where(user_id: params[:id])[0]
-      agreements = RentalAgreement.where(lessor_id: lessor.user_id, status: "pending")
-      render json: {"RentalAgreements": agreements}, status: :ok
+      agreements = RentalAgreement.where(lessor_id: lessor.user_id, status: 'pending')
+      render json: { "RentalAgreements": agreements }, status: :ok
     end
   end
 
   # GET /api/v1/rental_agreements/1
   # GET /api/v1/rental_agreements/1.json
   def show
-    if(RentalAgreement.where(id: params[:id]).exists?)
+    if RentalAgreement.where(id: params[:id]).exists?
       agreement = RentalAgreement.where(id: params[:id])[0]
-      render json: {"RentalAgreement": agreement}, status: :ok
+      render json: { "RentalAgreement": agreement }, status: :ok
     else
-      render json: { message: "Rental Agreement not found."}, status: :not_found
+      render json: { message: 'Rental Agreement not found.' }, status: :not_found
     end
   end
 
   def user_rental_agreements
-    if(Leaseholder.where(user_id: params[:id]).exists?)
+    if Leaseholder.where(user_id: params[:id]).exists?
       leaseholder = Leaseholder.where(user_id: params[:id])[0]
       agreements = RentalAgreement.where(leaseholder_id: leaseholder.user_id)
-      render json: {"RentalAgreements": agreements, "leaseholder": leaseholder.attributes.merge( :user => leaseholder.user)}, status: :ok
+      render json: { "RentalAgreements": agreements, "leaseholder": leaseholder.attributes.merge(user: leaseholder.user) },
+             status: :ok
     else
       lessor = Lessor.where(user_id: params[:id])[0]
       agreements = RentalAgreement.where(lessor_id: lessor.user_id)
-      render json: {"RentalAgreements": agreements, "lessor": lessor.attributes.merge( :user => lessor.user)}, status: :ok
+      render json: { "RentalAgreements": agreements, "lessor": lessor.attributes.merge(user: lessor.user) },
+             status: :ok
     end
   end
 
@@ -73,8 +74,14 @@ class Api::V1::RentalAgreementsController < ApplicationController
   end
 
   def approve_rental_agreement
-    return render json: { message: 'Id usuario no presente' }, status: :bad_request if params['api_v1_rental_agreement']['user_id'].blank?
-    return render json: { message: 'Id acuerdo no presente' }, status: :bad_request if params['api_v1_rental_agreement']['rental_agreement_id'].blank?
+    if params['api_v1_rental_agreement']['user_id'].blank?
+      return render json: { message: 'Id usuario no presente' },
+                    status: :bad_request
+    end
+    if params['api_v1_rental_agreement']['rental_agreement_id'].blank?
+      return render json: { message: 'Id acuerdo no presente' },
+                    status: :bad_request
+    end
 
     agreement = RentalAgreement.find(params['api_v1_rental_agreement']['rental_agreement_id'])
 
@@ -86,8 +93,14 @@ class Api::V1::RentalAgreementsController < ApplicationController
   end
 
   def reject_rental_agreement
-    return render json: { message: 'Id usuario no presente' }, status: :bad_request if params['api_v1_rental_agreement']['user_id'].blank?
-    return render json: { message: 'Id acuerdo no presente' }, status: :bad_request if params['api_v1_rental_agreement']['rental_agreement_id'].blank?
+    if params['api_v1_rental_agreement']['user_id'].blank?
+      return render json: { message: 'Id usuario no presente' },
+                    status: :bad_request
+    end
+    if params['api_v1_rental_agreement']['rental_agreement_id'].blank?
+      return render json: { message: 'Id acuerdo no presente' },
+                    status: :bad_request
+    end
 
     agreement = RentalAgreement.find(params['api_v1_rental_agreement']['rental_agreement_id'])
 
