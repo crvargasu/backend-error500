@@ -1,14 +1,20 @@
-class Api::V1::UserController < ApplicationController
-  before_action :set_api_v1_review, only: %i[show update destroy]
-  before_action :authenticate_user!
+# frozen_string_literal: true
 
-  def me
-    if Lessor.where(user_id: current_user.id).exists?
-      lessor = Lessor.where(user_id: current_user.id)[0]
-      render json: { "user": current_user, "other": lessor }, status: :ok
-    else
-      leaseholder = Leaseholder.where(user_id: current_user.id)[0]
-      render json: { "user": current_user, "other": leaseholder }, status: :ok
+module Api
+  module V1
+    class UserController < ApplicationController
+      before_action :set_api_v1_review, only: %i[show update destroy]
+      before_action :authenticate_user!
+
+      def me
+        if Lessor.where(user_id: current_user.id).exists?
+          lessor = Lessor.where(user_id: current_user.id)[0]
+          render json: { "user": current_user, "other": lessor }, status: :ok
+        else
+          leaseholder = Leaseholder.where(user_id: current_user.id)[0]
+          render json: { "user": current_user, "other": leaseholder }, status: :ok
+        end
+      end
     end
   end
 end

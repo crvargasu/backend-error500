@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateApiV1Leaseholders < ActiveRecord::Migration[7.0]
   def change
     create_table :leaseholders do |t|
