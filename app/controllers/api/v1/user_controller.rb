@@ -3,7 +3,6 @@
 module Api
   module V1
     class UserController < ApplicationController
-      before_action :set_api_v1_review, only: %i[show update destroy]
       before_action :authenticate_user!
 
       def me
