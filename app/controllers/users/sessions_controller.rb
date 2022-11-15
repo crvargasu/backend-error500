@@ -1,7 +1,12 @@
-class Users::SessionsController < Devise::SessionsController
+# frozen_string_literal: true
+
+module Users
+  class SessionsController < Devise::SessionsController
     respond_to :json
+
     private
-    def respond_with(resource, _opts = {})
+
+    def respond_with(_resource, _opts = {})
       current_user ? log_in_success : log_in_failure
     end
 
@@ -10,27 +15,28 @@ class Users::SessionsController < Devise::SessionsController
     end
 
     def log_in_success
-      if(Lessor.where(user_id: current_user.id).exists?)
+      if Lessor.exists?(user_id: current_user.id)
         lessor = Lessor.where(user_id: current_user.id)
-        render json: {"user": current_user.attributes.merge( :type => 'lessor'),
-          "other": lessor[0]}, status: :ok
+        render json: { user: current_user.attributes.merge(type: 'lessor'),
+                       other: lessor[0] }, status: :ok
       end
-      if(Leaseholder.where(user_id: current_user.id).exists?)
-        leaseholder = Leaseholder.where(user_id: current_user.id)
-        render json: {"user": current_user.attributes.merge( :type => 'leaseholder'),
-          "other": leaseholder[0]}, status: :ok
-      end
+      return unless Leaseholder.exists?(user_id: current_user.id)
+
+      leaseholder = Leaseholder.where(user_id: current_user.id)
+      render json: { user: current_user.attributes.merge(type: 'leaseholder'),
+                     other: leaseholder[0] }, status: :ok
     end
 
     def log_in_failure
-      render json: { message: "Logged in failure."}, status: :unauthorized
+      render json: { message: 'Logged in failure.' }, status: :unauthorized
     end
 
     def log_out_success
-      render json: { message: "Logged out." }, status: :ok
+      render json: { message: 'Logged out.' }, status: :ok
     end
-    
+
     def log_out_failure
-      render json: { message: "Logged out failure."}, status: :unauthorized
+      render json: { message: 'Logged out failure.' }, status: :unauthorized
     end
   end
+end
