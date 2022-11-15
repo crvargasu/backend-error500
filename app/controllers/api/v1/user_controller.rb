@@ -7,7 +7,7 @@ module Api
       before_action :authenticate_user!
 
       def me
-        if Lessor.where(user_id: current_user.id).exists?
+        if Lessor.exists?(user_id: current_user.id)
           lessor = Lessor.where(user_id: current_user.id)[0]
           render json: { user: current_user, other: lessor }, status: :ok
         else
