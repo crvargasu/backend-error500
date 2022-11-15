@@ -2,5 +2,5 @@
 
 class Lessor < ApplicationRecord
   belongs_to :user
-  has_many :rental_agreements
+  has_many :rental_agreements, dependent: :destroy
 end

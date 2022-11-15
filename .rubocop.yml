@@ -1,7 +1,7 @@
 require: rubocop-rails
 
 Layout/LineLength:
-  Max: 200
+  Max: 250
   Exclude:
     - 'Gemfile'
 AllCops:
@@ -16,6 +16,9 @@ Metrics/MethodLength:
   Max: 20
   Exclude:
     - 'db/**/*'
+
+Metrics/ClassLength:
+  Max: 150
 
 Rails/NotNullColumn:
   Exclude:
