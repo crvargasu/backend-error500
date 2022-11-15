@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'RentalAgreements', type: :request do
+RSpec.describe 'RentalAgreements', type: :request do # rubocop:disable Metrics/BlockLength
   describe 'GET /api/v1/rental_agreements' do
     let(:user) { create(:user) }
     let(:auth) { auth_headers(user) }
