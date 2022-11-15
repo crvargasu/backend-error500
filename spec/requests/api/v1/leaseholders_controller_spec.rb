@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Leaseholders', type: :request do
+RSpec.describe 'LeaseholdersController', type: :request do
   describe 'GET /api/v1/leaseholders' do
     let(:user) { create(:user) }
     let(:auth) { auth_headers(user) }
