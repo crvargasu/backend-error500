@@ -15,12 +15,12 @@ module Users
     end
 
     def log_in_success
-      if Lessor.where(user_id: current_user.id).exists?
+      if Lessor.exists?(user_id: current_user.id)
         lessor = Lessor.where(user_id: current_user.id)
         render json: { user: current_user.attributes.merge(type: 'lessor'),
                        other: lessor[0] }, status: :ok
       end
-      return unless Leaseholder.where(user_id: current_user.id).exists?
+      return unless Leaseholder.exists?(user_id: current_user.id)
 
       leaseholder = Leaseholder.where(user_id: current_user.id)
       render json: { user: current_user.attributes.merge(type: 'leaseholder'),

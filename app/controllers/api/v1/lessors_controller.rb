@@ -16,7 +16,7 @@ module Api
       # GET /api/v1/lessors/1
       # GET /api/v1/lessors/1.json
       def show
-        if Lessor.where(user_id: params[:id]).exists?
+        if Lessor.exists?(user_id: params[:id])
           lessor = Lessor.where(user_id: params[:id])[0]
           user = User.find(params[:id])
           render json: { user: user, other: lessor }, status: :ok
@@ -40,7 +40,7 @@ module Api
       # PATCH/PUT /api/v1/lessors/1
       # PATCH/PUT /api/v1/lessors/1.json
       def update
-        if Lessor.where(user_id: params[:id]).exists?
+        if Lessor.exists?(user_id: params[:id])
           @lessor = Lessor.where(user_id: params[:id])[0]
           @lessor.update(params[:other])
           @user = User.find(params[:id])

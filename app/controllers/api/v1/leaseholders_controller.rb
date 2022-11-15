@@ -16,7 +16,7 @@ module Api
       # GET /api/v1/leaseholders/1
       # GET /api/v1/leaseholders/1.json
       def show
-        if Leaseholder.where(user_id: params[:id]).exists?
+        if Leaseholder.exists?(user_id: params[:id])
           leaseholder = Leaseholder.where(user_id: params[:id])[0]
           user = User.find(params[:id])
           render json: { user: user, other: leaseholder }, status: :ok
@@ -41,7 +41,7 @@ module Api
       # PATCH/PUT /api/v1/leaseholders/1
       # PATCH/PUT /api/v1/leaseholders/1.json
       def update
-        if Leaseholder.where(user_id: params[:id]).exists?
+        if Leaseholder.exists?(user_id: params[:id])
           @leaseholder = Leaseholder.where(user_id: params[:id])[0]
           @leaseholder.update(params[:other])
           @user = User.find(params[:id])
@@ -53,7 +53,7 @@ module Api
       end
 
       def polygon
-        if Leaseholder.where(user_id: params[:id]).exists?
+        if Leaseholder.exists?(user_id: params[:id])
           leaseholder = Leaseholder.where(user_id: params[:id])[0]
           render json: { polygon: leaseholder.polygon }, status: :ok
         else

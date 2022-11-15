@@ -26,6 +26,7 @@ Metrics/BlockLength:
     - 'test/**/*'
 
 Style/Documentation:
+  Enabled: false
   Exclude:
     - 'test/**/*'
     - 'db/**/*'

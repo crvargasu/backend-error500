@@ -18,7 +18,7 @@ module Api
       end
 
       def pending_rental_agreements
-        if Leaseholder.where(user_id: params[:id]).exists?
+        if Leaseholder.exists?(user_id: params[:id])
           leaseholder = Leaseholder.where(user_id: params[:id])[0]
           agreements = RentalAgreement.where(leaseholder_id: leaseholder.user_id, status: 'pending')
         else
@@ -31,7 +31,7 @@ module Api
       # GET /api/v1/rental_agreements/1
       # GET /api/v1/rental_agreements/1.json
       def show
-        if RentalAgreement.where(id: params[:id]).exists?
+        if RentalAgreement.exists?(id: params[:id])
           agreement = RentalAgreement.where(id: params[:id])[0]
           render json: { RentalAgreement: agreement }, status: :ok
         else
@@ -40,7 +40,7 @@ module Api
       end
 
       def user_rental_agreements
-        if Leaseholder.where(user_id: params[:id]).exists?
+        if Leaseholder.exists?(user_id: params[:id])
           leaseholder = Leaseholder.where(user_id: params[:id])[0]
           agreements = RentalAgreement.where(leaseholder_id: leaseholder.user_id)
           render json: { RentalAgreements: agreements, leaseholder: leaseholder.attributes.merge(user: leaseholder.user) },
