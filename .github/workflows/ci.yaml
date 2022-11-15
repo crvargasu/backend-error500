@@ -40,7 +40,6 @@ jobs:
           RAILS_ENV: test
           DB_USER: postgres
           DB_PASSWORD: postgres
-          DB_HOST: localhost
           DATABASE_URL: "postgres://postgres@localhost:5432/test_database_name"
         run: |
           bundle exec rails db:create
