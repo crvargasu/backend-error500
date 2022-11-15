@@ -14,15 +14,6 @@ module Api
         assert_response :success
       end
 
-      test 'should create api_v1_admin' do
-        assert_difference('Api::V1::Admin.count') do
-          post api_v1_admins_url, params: { api_v1_admin: { content: @api_v1_admin.content, title: @api_v1_admin.title } },
-                                  as: :json
-        end
-
-        assert_response :created
-      end
-
       test 'should show api_v1_admin' do
         get api_v1_admin_url(@api_v1_admin), as: :json
         assert_response :success

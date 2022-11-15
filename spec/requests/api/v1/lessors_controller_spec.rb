@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'LessorsController', type: :request do
+RSpec.describe 'LessorsController', type: :request do # rubocop:disable Metrics/BlockLength
   describe 'GET /api/v1/lessors' do
     let(:user) { create(:user) }
     let(:auth) { auth_headers(user) }
@@ -23,7 +23,7 @@ RSpec.describe 'LessorsController', type: :request do
     end
   end
 
-  describe 'GET /api/v1/lessors/:id' do
+  describe 'GET /api/v1/lessors/:id' do # rubocop:disable Metrics/BlockLength
     let(:user) { create(:user) }
     let(:auth) { auth_headers(user) }
     let!(:lessor) { create(:lessor, user: user) }
@@ -60,7 +60,7 @@ RSpec.describe 'LessorsController', type: :request do
     end
   end
 
-  describe 'PUT /api/v1/lessors/:id' do
+  describe 'PUT /api/v1/lessors/:id' do # rubocop:disable Metrics/BlockLength
     let(:user) { create(:user) }
     let(:auth) { auth_headers(user) }
     let!(:lessors) { create(:lessor, credit: 3, user: user) }

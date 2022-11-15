@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'UsersController', type: :request do
+RSpec.describe 'UsersController', type: :request do # rubocop:disable Metrics/BlockLength
   describe 'GET /api/v1/me with leaseholder' do
     let(:user) { create(:user) }
     let(:auth) { auth_headers(user) }
