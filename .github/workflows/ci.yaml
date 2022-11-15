@@ -1,0 +1,47 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Linting
+
+on: [push]
+
+jobs:
+  Rubocop:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1.2
+      - run: bundle install
+      - name: Rubocop
+        run: rubocop
+
+  Test:
+      runs-on: ubuntu-18.04
+      services:
+        postgres:
+          image: postgres:14.5
+          ports:
+            - 5432:5432
+          env:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: test_database_name
+          options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+      steps:
+      - uses: actions/checkout@v3
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1.2
+      - name: Bundle
+        run: bundle install
+      - name: Postgres and Test
+        env:
+          RAILS_ENV: "test"
+          DB_USER: postgres
+          DB_PASSWORD: postgres
+          DATABASE_URL: "postgres://postgres@localhost:5432/test_database_name"
+        run: |
+          bundle exec rake db:create
+          bundle exec rake db:schema:load
+          bundle exec rake
