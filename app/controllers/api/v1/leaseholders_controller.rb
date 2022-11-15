@@ -6,18 +6,18 @@ class Api::V1::LeaseholdersController < ApplicationController
   # GET /api/v1/leaseholders.json
   def index
     @api_v1_leaseholders = Leaseholder.all
-    render json: @api_v1_leaseholders.to_json( :include => [:user] )
+    render json: @api_v1_leaseholders.to_json(include: [:user])
   end
 
   # GET /api/v1/leaseholders/1
   # GET /api/v1/leaseholders/1.json
   def show
-    if(Leaseholder.where(user_id: params[:id]).exists?)
+    if Leaseholder.where(user_id: params[:id]).exists?
       leaseholder = Leaseholder.where(user_id: params[:id])[0]
       user = User.find(params[:id])
-      render json: {"user": user, "other":  leaseholder}, status: :ok
+      render json: { "user": user, "other": leaseholder }, status: :ok
     else
-      render json: { message: "Leaseholder not found."}, status: :not_found
+      render json: { message: 'Leaseholder not found.' }, status: :not_found
     end
   end
 
@@ -37,29 +37,29 @@ class Api::V1::LeaseholdersController < ApplicationController
   # PATCH/PUT /api/v1/leaseholders/1
   # PATCH/PUT /api/v1/leaseholders/1.json
   def update
-    if(Leaseholder.where(user_id: params[:id]).exists?)
+    if Leaseholder.where(user_id: params[:id]).exists?
       @leaseholder = Leaseholder.where(user_id: params[:id])[0]
       @leaseholder.update(params[:other])
       @user = User.find(params[:id])
       @user.update(params[:user])
-      render json: {"user": @user, "other": @leaseholder}, status: :ok
+      render json: { "user": @user, "other": @leaseholder }, status: :ok
     else
-      render json: { message: "Leaseholder not found."}, status: :not_found
+      render json: { message: 'Leaseholder not found.' }, status: :not_found
     end
   end
 
   def polygon
-    if(Leaseholder.where(user_id: params[:id]).exists?)
+    if Leaseholder.where(user_id: params[:id]).exists?
       leaseholder = Leaseholder.where(user_id: params[:id])[0]
       render json: { polygon: leaseholder.polygon }, status: :ok
     else
-      render json: { message: "Leaseholder not found."}, status: :not_found
+      render json: { message: 'Leaseholder not found.' }, status: :not_found
     end
   end
 
   def polygons
     @leaseholders = Leaseholder.all
-    polygons = @leaseholders.map { |leaseholder| leaseholder.polygon } 
+    polygons = @leaseholders.map { |leaseholder| leaseholder.polygon }
     render json: { polygons: polygons }, status: :ok
   end
 
@@ -70,13 +70,14 @@ class Api::V1::LeaseholdersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_api_v1_leaseholder
-      @api_v1_leaseholder = Leaseholder.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def api_v1_leaseholder_params
-      params.require(:api_v1_leaseholder).permit(:title, :content)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_api_v1_leaseholder
+    @api_v1_leaseholder = Leaseholder.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def api_v1_leaseholder_params
+    params.require(:api_v1_leaseholder).permit(:title, :content)
+  end
 end

@@ -1,3 +1,3 @@
 class Review < ApplicationRecord
-    belongs_to :leaseholder
+  belongs_to :leaseholder
 end

@@ -6,18 +6,18 @@ class Api::V1::LessorsController < ApplicationController
   # GET /api/v1/lessors.json
   def index
     @api_v1_lessors = Lessor.all
-    render json: @api_v1_lessors.to_json( :include => [:user] )
+    render json: @api_v1_lessors.to_json(include: [:user])
   end
 
   # GET /api/v1/lessors/1
   # GET /api/v1/lessors/1.json
   def show
-    if(Lessor.where(user_id: params[:id]).exists?)
+    if Lessor.where(user_id: params[:id]).exists?
       lessor = Lessor.where(user_id: params[:id])[0]
       user = User.find(params[:id])
-      render json: {"user": user, "other": lessor}, status: :ok
+      render json: { "user": user, "other": lessor }, status: :ok
     else
-      render json: { message: "Lessor not found."}, status: :not_found
+      render json: { message: 'Lessor not found.' }, status: :not_found
     end
   end
 
@@ -36,14 +36,14 @@ class Api::V1::LessorsController < ApplicationController
   # PATCH/PUT /api/v1/lessors/1
   # PATCH/PUT /api/v1/lessors/1.json
   def update
-    if(Lessor.where(user_id: params[:id]).exists?)
+    if Lessor.where(user_id: params[:id]).exists?
       @lessor = Lessor.where(user_id: params[:id])[0]
       @lessor.update(params[:other])
       @user = User.find(params[:id])
       @user.update(params[:user])
-      render json: {"user": @user, "other": @lessor}, status: :ok
+      render json: { "user": @user, "other": @lessor }, status: :ok
     else
-      render json: { message: "Lessor not found."}, status: :not_found
+      render json: { message: 'Lessor not found.' }, status: :not_found
     end
   end
 

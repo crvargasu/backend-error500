@@ -1,5 +1,5 @@
 class Api::V1::ReviewsController < ApplicationController
-  before_action :set_api_v1_review, only: %i[ show update destroy ]
+  before_action :set_api_v1_review, only: %i[show update destroy]
   before_action :authenticate_user!
 
   # GET /api/v1/reviews
@@ -11,8 +11,7 @@ class Api::V1::ReviewsController < ApplicationController
 
   # GET /api/v1/reviews/1
   # GET /api/v1/reviews/1.json
-  def show
-  end
+  def show; end
 
   # POST /api/v1/reviews
   # POST /api/v1/reviews.json

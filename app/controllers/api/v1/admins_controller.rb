@@ -1,5 +1,5 @@
 class Api::V1::AdminsController < ApplicationController
-  before_action :set_api_v1_admin, only: %i[ show update destroy ]
+  before_action :set_api_v1_admin, only: %i[show update destroy]
   before_action :authenticate_user!
 
   # GET /api/v1/admins
@@ -11,8 +11,7 @@ class Api::V1::AdminsController < ApplicationController
 
   # GET /api/v1/admins/1
   # GET /api/v1/admins/1.json
-  def show
-  end
+  def show; end
 
   # POST /api/v1/admins
   # POST /api/v1/admins.json
@@ -43,13 +42,14 @@ class Api::V1::AdminsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_api_v1_admin
-      @api_v1_admin = Admin.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def api_v1_admin_params
-      params.require(:api_v1_admin).permit(:title, :content)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_api_v1_admin
+    @api_v1_admin = Admin.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def api_v1_admin_params
+    params.require(:api_v1_admin).permit(:title, :content)
+  end
 end
