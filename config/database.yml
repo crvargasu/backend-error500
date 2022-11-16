@@ -5,8 +5,8 @@ default: &default
   password: password
   pool: 5 # not mandatory
   timeout: 5000 # not mandatory
-  host: localhost
-  #host: db
+  # host: localhost
+  host: db
   port: 5432
 
 test:
