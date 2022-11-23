@@ -42,9 +42,13 @@ module Api
       def update
         if Lessor.exists?(user_id: params[:id])
           @lessor = Lessor.where(user_id: params[:id])[0]
-          @lessor.update(params[:other])
-          @user = User.find(params[:id])
-          @user.update(params[:user])
+          if params[:other]
+            @lessor.update(params[:other])
+          end
+          if params[:user]
+            @user = User.find(params[:id])
+            @user.update(params[:user])
+          end
           render json: { user: @user, other: @lessor }, status: :ok
         else
           render json: { message: 'Lessor not found.' }, status: :not_found
