@@ -75,8 +75,9 @@ RSpec.describe 'RentalAgreementsController', type: :request do # rubocop:disable
     let(:user) { create(:user) }
     let(:auth) { auth_headers(user) }
 
-    let!(:leaseholder) { create(:leaseholder, user: user) }
-    let!(:rental_agreement) { create(:rental_agreement, leaseholder: leaseholder, status: 'pending') }
+    let(:leaseholder) { create(:leaseholder, user: user) }
+    let(:lessor) { create(:lessor) }
+    let!(:rental_agreement) { create(:rental_agreement, leaseholder: leaseholder, lessor: lessor, status: 'pending') }
 
     describe 'HTTP Request' do
       context 'when logged in' do
