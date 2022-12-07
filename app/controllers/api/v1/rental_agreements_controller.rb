@@ -41,15 +41,9 @@ module Api
 
       def user_rental_agreements
         if Leaseholder.exists?(user_id: params[:id])
-          leaseholder = Leaseholder.where(user_id: params[:id])[0]
-          agreements = RentalAgreement.where(leaseholder_id: leaseholder.user_id)
-          render json: { RentalAgreements: agreements, leaseholder: leaseholder.attributes.merge(user: leaseholder.user) },
-                 status: :ok
+          user_rental_agreements_leaseholder
         else
-          lessor = Lessor.where(user_id: params[:id])[0]
-          agreements = RentalAgreement.where(lessor_id: lessor.user_id)
-          render json: { RentalAgreements: agreements, lessor: lessor.attributes.merge(user: lessor.user) },
-                 status: :ok
+          user_rental_agreements_lessor
         end
       end
 
@@ -57,10 +51,10 @@ module Api
       # POST /api/v1/rental_agreements.json
       def create
         @api_v1_rental_agreement = RentalAgreement.new(api_v1_rental_agreement_params)
-        @api_v1_rental_agreement.status = false
+        @api_v1_rental_agreement.status = 0
 
         if @api_v1_rental_agreement.save
-          render json: { result: 'Rental Agreement created' }, status: :created
+          render json: @api_v1_rental_agreement, status: :created
         else
           render json: @api_v1_rental_agreement.errors, status: :unprocessable_entity
         end
@@ -130,8 +124,38 @@ module Api
       # Only allow a list of trusted parameters through.
       def api_v1_rental_agreement_params
         params.require(:api_v1_rental_agreement).permit(
-          :timestamp_start, :lessor_id, :leaseholder_id, :reasons, :offer_price
+          :timestamp_start, :lessor_id,
+          :leaseholder_id, :reasons, :offer_price,
+          :days_for_week, :timestamp_end, :status
         )
+      end
+
+      def merge_lessor_to_rental_agreements(agreements)
+        agreements.each do |agreement|
+          agreement.attributes.merge(lessor: agreement.lessor.attributes.merge(user: agreement.lessor.user))
+        end
+        agreements
+      end
+
+      def merge_leaseholder_to_rental_agreements(agreements)
+        agreements.each do |agreement|
+          agreement.attributes.merge(leaseholder: agreement.leaseholder.attributes.merge(user: agreement.leaseholder.user))
+        end
+        agreements
+      end
+
+      def user_rental_agreements_leaseholder
+        leaseholder = Leaseholder.where(user_id: params[:id])[0]
+        agreements = RentalAgreement.where(leaseholder_id: leaseholder.user_id)
+        agreements = merge_lessor_to_rental_agreements(agreements)
+        render json: { RentalAgreements: agreements, leaseholder: leaseholder.attributes.merge(user: leaseholder.user) }, status: :ok
+      end
+
+      def user_rental_agreements_lessor
+        lessor = Lessor.where(user_id: params[:id])[0]
+        agreements = RentalAgreement.where(lessor_id: lessor.user_id)
+        agreements = merge_leaseholder_to_rental_agreements(agreements)
+        render json: { RentalAgreements: agreements, lessor: lessor.attributes.merge(user: lessor.user) }, status: :ok
       end
     end
   end

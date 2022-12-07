@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_05_204246) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_07_004135) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -65,6 +65,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_05_204246) do
     t.bigint "leaseholder_id", null: false
     t.string "reasons", limit: 100
     t.decimal "offer_price"
+    t.integer "days_for_week"
     t.index ["leaseholder_id"], name: "index_rental_agreements_on_leaseholder_id"
     t.index ["lessor_id"], name: "index_rental_agreements_on_lessor_id"
   end
