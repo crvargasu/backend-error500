@@ -68,6 +68,7 @@ end
     lessor_id: number + 5,
     leaseholder_id: number,
     reasons: 'reasons for the rental agreement',
-    offer_price: 1000
+    offer_price: 1000,
+    days_for_week: 3
   )
 end

@@ -51,10 +51,10 @@ module Api
       # POST /api/v1/rental_agreements.json
       def create
         @api_v1_rental_agreement = RentalAgreement.new(api_v1_rental_agreement_params)
-        @api_v1_rental_agreement.status = false
+        @api_v1_rental_agreement.status = 0
 
         if @api_v1_rental_agreement.save
-          render json: { result: 'Rental Agreement created' }, status: :created
+          render json: @api_v1_rental_agreement, status: :created
         else
           render json: @api_v1_rental_agreement.errors, status: :unprocessable_entity
         end
@@ -124,7 +124,9 @@ module Api
       # Only allow a list of trusted parameters through.
       def api_v1_rental_agreement_params
         params.require(:api_v1_rental_agreement).permit(
-          :timestamp_start, :lessor_id, :leaseholder_id, :reasons, :offer_price
+          :timestamp_start, :lessor_id,
+          :leaseholder_id, :reasons, :offer_price,
+          :days_for_week, :timestamp_end, :status
         )
       end
 
