@@ -3,7 +3,7 @@
 module Api
   module V1
     class RentalAgreementsController < ApplicationController
-      # before_action :set_api_v1_rental_agreement, only: %i[ show update destroy ]
+      before_action :set_api_v1_rental_agreement, only: %i[update]
       ActionController::Parameters.permit_all_parameters = true
       before_action :authenticate_user!
 
@@ -20,11 +20,13 @@ module Api
       def pending_rental_agreements
         if Leaseholder.exists?(user_id: params[:id])
           leaseholder = Leaseholder.where(user_id: params[:id])[0]
-          agreements = RentalAgreement.where(leaseholder_id: leaseholder.user_id, status: 'pending')
+          agreements = RentalAgreement.where(leaseholder_id: leaseholder.user_id, status: %w[pending denied])
         else
           lessor = Lessor.where(user_id: params[:id])[0]
-          agreements = RentalAgreement.where(lessor_id: lessor.user_id, status: 'pending')
+          agreements = RentalAgreement.where(lessor_id: lessor.user_id, status: %w[pending denied])
         end
+        agreements = merge_leaseholder_to_rental_agreements(agreements)
+        agreements = merge_lessor_to_rental_agreements(agreements)
         render json: { RentalAgreements: agreements }, status: :ok
       end
 
@@ -33,6 +35,8 @@ module Api
       def show
         if RentalAgreement.exists?(id: params[:id])
           agreement = RentalAgreement.where(id: params[:id])[0]
+          agreement.attributes.merge(lessor: agreement.lessor.attributes.merge(user: agreement.lessor.user))
+          agreement.attributes.merge(leaseholder: agreement.leaseholder.attributes.merge(user: agreement.leaseholder.user))
           render json: { RentalAgreement: agreement }, status: :ok
         else
           render json: { message: 'Rental Agreement not found.' }, status: :not_found
@@ -64,7 +68,7 @@ module Api
       # PATCH/PUT /api/v1/rental_agreements/1.json
       def update
         if @api_v1_rental_agreement.update(api_v1_rental_agreement_params)
-          render :show, status: :ok, location: @api_v1_rental_agreement
+          render json: { message: 'Rental Agreement updated' }, status: :ok
         else
           render json: @api_v1_rental_agreement.errors, status: :unprocessable_entity
         end
@@ -146,14 +150,14 @@ module Api
 
       def user_rental_agreements_leaseholder
         leaseholder = Leaseholder.where(user_id: params[:id])[0]
-        agreements = RentalAgreement.where(leaseholder_id: leaseholder.user_id)
+        agreements = RentalAgreement.where(leaseholder_id: leaseholder.user_id, status: 'approved')
         agreements = merge_lessor_to_rental_agreements(agreements)
         render json: { RentalAgreements: agreements, leaseholder: leaseholder.attributes.merge(user: leaseholder.user) }, status: :ok
       end
 
       def user_rental_agreements_lessor
         lessor = Lessor.where(user_id: params[:id])[0]
-        agreements = RentalAgreement.where(lessor_id: lessor.user_id)
+        agreements = RentalAgreement.where(lessor_id: lessor.user_id, status: 'approved')
         agreements = merge_leaseholder_to_rental_agreements(agreements)
         render json: { RentalAgreements: agreements, lessor: lessor.attributes.merge(user: lessor.user) }, status: :ok
       end
