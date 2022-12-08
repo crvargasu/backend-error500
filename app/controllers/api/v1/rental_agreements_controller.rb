@@ -101,10 +101,10 @@ module Api
 
         agreement = RentalAgreement.find(params['api_v1_rental_agreement']['rental_agreement_id'])
 
-        if agreement.destroy
-          render json: { message: 'Rental agreement destroyed' }, status: :ok
+        if agreement.update(status: 2)
+          render json: { message: 'Rental agreement denied' }, status: :ok
         else
-          render json: { message: 'Rental agreement could not be destroyed' }, status: :bad_request
+          render json: { message: 'Rental agreement could not be denied' }, status: :bad_request
         end
       end
 
