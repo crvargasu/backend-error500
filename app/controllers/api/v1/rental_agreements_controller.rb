@@ -3,7 +3,7 @@
 module Api
   module V1
     class RentalAgreementsController < ApplicationController
-      # before_action :set_api_v1_rental_agreement, only: %i[ show update destroy ]
+      before_action :set_api_v1_rental_agreement, only: %i[update]
       ActionController::Parameters.permit_all_parameters = true
       before_action :authenticate_user!
 
@@ -64,7 +64,7 @@ module Api
       # PATCH/PUT /api/v1/rental_agreements/1.json
       def update
         if @api_v1_rental_agreement.update(api_v1_rental_agreement_params)
-          render :show, status: :ok, location: @api_v1_rental_agreement
+          render json: { message: 'Rental Agreement updated' }, status: :ok
         else
           render json: @api_v1_rental_agreement.errors, status: :unprocessable_entity
         end
