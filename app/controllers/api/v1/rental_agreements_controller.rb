@@ -20,11 +20,13 @@ module Api
       def pending_rental_agreements
         if Leaseholder.exists?(user_id: params[:id])
           leaseholder = Leaseholder.where(user_id: params[:id])[0]
-          agreements = RentalAgreement.where(leaseholder_id: leaseholder.user_id, status: 'pending')
+          agreements = RentalAgreement.where(leaseholder_id: leaseholder.user_id, status: %w[pending denied])
         else
           lessor = Lessor.where(user_id: params[:id])[0]
-          agreements = RentalAgreement.where(lessor_id: lessor.user_id, status: 'pending')
+          agreements = RentalAgreement.where(lessor_id: lessor.user_id, status: %w[pending denied])
         end
+        agreements = merge_leaseholder_to_rental_agreements(agreements)
+        agreements = merge_lessor_to_rental_agreements(agreements)
         render json: { RentalAgreements: agreements }, status: :ok
       end
 
@@ -33,6 +35,8 @@ module Api
       def show
         if RentalAgreement.exists?(id: params[:id])
           agreement = RentalAgreement.where(id: params[:id])[0]
+          agreement.attributes.merge(lessor: agreement.lessor.attributes.merge(user: agreement.lessor.user))
+          agreement.attributes.merge(leaseholder: agreement.leaseholder.attributes.merge(user: agreement.leaseholder.user))
           render json: { RentalAgreement: agreement }, status: :ok
         else
           render json: { message: 'Rental Agreement not found.' }, status: :not_found
