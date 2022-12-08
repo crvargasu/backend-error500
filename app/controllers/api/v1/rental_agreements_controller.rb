@@ -150,14 +150,14 @@ module Api
 
       def user_rental_agreements_leaseholder
         leaseholder = Leaseholder.where(user_id: params[:id])[0]
-        agreements = RentalAgreement.where(leaseholder_id: leaseholder.user_id)
+        agreements = RentalAgreement.where(leaseholder_id: leaseholder.user_id, status: 'approved')
         agreements = merge_lessor_to_rental_agreements(agreements)
         render json: { RentalAgreements: agreements, leaseholder: leaseholder.attributes.merge(user: leaseholder.user) }, status: :ok
       end
 
       def user_rental_agreements_lessor
         lessor = Lessor.where(user_id: params[:id])[0]
-        agreements = RentalAgreement.where(lessor_id: lessor.user_id)
+        agreements = RentalAgreement.where(lessor_id: lessor.user_id, status: 'approved')
         agreements = merge_leaseholder_to_rental_agreements(agreements)
         render json: { RentalAgreements: agreements, lessor: lessor.attributes.merge(user: lessor.user) }, status: :ok
       end
