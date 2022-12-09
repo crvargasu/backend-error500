@@ -25,9 +25,8 @@ module Api
           lessor = Lessor.where(user_id: params[:id])[0]
           agreements = RentalAgreement.where(lessor_id: lessor.user_id, status: %w[pending denied])
         end
-        agreements = merge_leaseholder_to_rental_agreements(agreements)
-        agreements = merge_lessor_to_rental_agreements(agreements)
-        render json: { RentalAgreements: agreements }, status: :ok
+        agreements_list = add_leaseholder_and_lessor_to_rental_agreements(agreements)
+        render json: { RentalAgreements: agreements_list }, status: :ok
       end
 
       # GET /api/v1/rental_agreements/1
@@ -35,9 +34,10 @@ module Api
       def show
         if RentalAgreement.exists?(id: params[:id])
           agreement = RentalAgreement.where(id: params[:id])[0]
-          agreement.attributes.merge(lessor: agreement.lessor.attributes.merge(user: agreement.lessor.user))
-          agreement.attributes.merge(leaseholder: agreement.leaseholder.attributes.merge(user: agreement.leaseholder.user))
-          render json: { RentalAgreement: agreement }, status: :ok
+          agreement_hash = agreement.attributes
+                                    .merge(leaseholder: agreement.leaseholder.attributes.merge(user: agreement.leaseholder.user.attributes))
+                                    .merge(lessor: agreement.lessor.attributes.merge(user: agreement.lessor.user.attributes))
+          render json: { RentalAgreement: agreement_hash }, status: :ok
         else
           render json: { message: 'Rental Agreement not found.' }, status: :not_found
         end
@@ -152,14 +152,25 @@ module Api
         leaseholder = Leaseholder.where(user_id: params[:id])[0]
         agreements = RentalAgreement.where(leaseholder_id: leaseholder.user_id, status: 'approved')
         agreements = merge_lessor_to_rental_agreements(agreements)
-        render json: { RentalAgreements: agreements, leaseholder: leaseholder.attributes.merge(user: leaseholder.user) }, status: :ok
+        render json: { RentalAgreements: agreements, leaseholder: leaseholder.attributes.merge(user: leaseholder.user.attributes) }, status: :ok
       end
 
       def user_rental_agreements_lessor
         lessor = Lessor.where(user_id: params[:id])[0]
         agreements = RentalAgreement.where(lessor_id: lessor.user_id, status: 'approved')
         agreements = merge_leaseholder_to_rental_agreements(agreements)
-        render json: { RentalAgreements: agreements, lessor: lessor.attributes.merge(user: lessor.user) }, status: :ok
+        render json: { RentalAgreements: agreements, lessor: lessor.attributes.merge(user: lessor.user.attributes) }, status: :ok
+      end
+
+      def add_leaseholder_and_lessor_to_rental_agreements(agreements)
+        agreements_list = []
+        agreements.each do |agreement|
+          agreement_hash = agreement.attributes
+          agreement_hash.merge!(leaseholder: agreement.leaseholder.attributes.merge(user: agreement.leaseholder.user.attributes))
+          agreement_hash.merge!(lessor: agreement.lessor.attributes.merge(user: agreement.lessor.user.attributes))
+          agreements_list << agreement_hash
+        end
+        agreements_list
       end
     end
   end
