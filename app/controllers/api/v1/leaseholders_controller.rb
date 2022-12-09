@@ -98,7 +98,8 @@ module Api
         leaseholder.reviews.each do |l|
           mean_score += l.score
         end
-        mean_score /= leaseholder.reviews.length if leaseholder.reviews.length.positive?
+        mean_score /= leaseholder.reviews.length.to_f if leaseholder.reviews.length.positive?
+        mean_score = mean_score.round
         leaseholder.update(mean_reviews: mean_score)
       end
     end
