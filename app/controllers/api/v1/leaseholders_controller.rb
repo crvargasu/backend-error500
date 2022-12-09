@@ -10,6 +10,10 @@ module Api
       # GET /api/v1/leaseholders.json
       def index
         @api_v1_leaseholders = Leaseholder.all
+        @api_v1_leaseholders.each do |leaseholder|
+          calculate_mean_reviews(leaseholder.user_id)
+        end
+
         render json: @api_v1_leaseholders.to_json(include: [:user])
       end
 
@@ -17,6 +21,7 @@ module Api
       # GET /api/v1/leaseholders/1.json
       def show
         if Leaseholder.exists?(user_id: params[:id])
+          calculate_mean_reviews(params[:id])
           leaseholder = Leaseholder.where(user_id: params[:id])[0]
           user = User.find(params[:id])
           render json: { user: user, other: leaseholder }, status: :ok
@@ -85,6 +90,17 @@ module Api
       # Only allow a list of trusted parameters through.
       def api_v1_leaseholder_params
         params.require(:api_v1_leaseholder).permit(:title, :content)
+      end
+
+      def calculate_mean_reviews(id)
+        leaseholder = Leaseholder.where(user_id: id)[0]
+        mean_score = 0
+        leaseholder.reviews.each do |l|
+          mean_score += l.score
+        end
+        mean_score /= leaseholder.reviews.length.to_f if leaseholder.reviews.length.positive?
+        mean_score = mean_score.round
+        leaseholder.update(mean_reviews: mean_score)
       end
     end
   end
