@@ -13,6 +13,7 @@ Rails.application.routes.draw do
       put 'rental_agreements/pending/approve', to: 'rental_agreements#approve_rental_agreement'
       delete 'rental_agreements/pending/delete', to: 'rental_agreements#reject_rental_agreement'
       resources :leaseholders
+      get 'leaseholders/pending/all', to: 'leaseholders#pending_leaseholders'
       resources :lessors
       get 'me', to: 'user#me'
     end

@@ -66,4 +66,84 @@ RSpec.describe 'Session routes', type: :request do # rubocop:disable Metrics/Blo
       end
     end
   end
+  describe 'login with leaseholder user' do
+    let!(:url) { '/users/sign_in' }
+    let!(:email) { 'email@domain.code' }
+    let!(:password) { '123123123' }
+
+    context 'when attempting login with correct credentials' do
+      let!(:correct_params) { login_params(email, password) }
+      let!(:user) { create(:user, email: email, password: password) }
+      let!(:leaseholder) { create(:leaseholder, user: user) }
+
+      before do
+        post url, params: correct_params
+      end
+
+      it 'should be successful' do
+        expect(response).to be_successful
+      end
+
+      it 'should return correct user' do
+        expect(JSON.parse(response.body)['user']['id'].to_i).to eq(user.id)
+      end
+
+      it 'should return correct leaseholder' do
+        expect(JSON.parse(response.body)['other']['id'].to_i).to eq(leaseholder.id)
+      end
+    end
+  end
+  describe 'login with lessor user' do
+    let!(:url) { '/users/sign_in' }
+    let!(:email) { 'email@domain.code' }
+    let!(:password) { '123123123' }
+
+    context 'when attempting login with correct credentials' do
+      let!(:correct_params) { login_params(email, password) }
+      let!(:user) { create(:user, email: email, password: password) }
+      let!(:lessor) { create(:lessor, user: user) }
+
+      before do
+        post url, params: correct_params
+      end
+
+      it 'should be successful' do
+        expect(response).to be_successful
+      end
+
+      it 'should return correct user' do
+        expect(JSON.parse(response.body)['user']['id'].to_i).to eq(user.id)
+      end
+
+      it 'should return correct lessor' do
+        expect(JSON.parse(response.body)['other']['id'].to_i).to eq(lessor.id)
+      end
+    end
+  end
+  describe 'login with lessor user' do
+    let!(:url) { '/users/sign_in' }
+    let!(:email) { 'email@domain.code' }
+    let!(:password) { '123123123' }
+
+    context 'when attempting login with correct credentials' do
+      let!(:correct_params) { login_params(email, password) }
+      let!(:user) { create(:user, email: email, password: password, role: 'admin') }
+
+      before do
+        post url, params: correct_params
+      end
+
+      it 'should be successful' do
+        expect(response).to be_successful
+      end
+
+      it 'should return correct user' do
+        expect(JSON.parse(response.body)['user']['id'].to_i).to eq(user.id)
+      end
+
+      it 'should return correct lessor' do
+        expect(JSON.parse(response.body)['user']['role']).to eq('admin')
+      end
+    end
+  end
 end
