@@ -69,7 +69,6 @@ module Api
         end
       end
 
-
       # DELETE /api/v1/leaseholders/1
       # DELETE /api/v1/leaseholders/1.json
       def destroy
