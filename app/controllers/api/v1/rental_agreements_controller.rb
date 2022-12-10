@@ -20,10 +20,10 @@ module Api
       def pending_rental_agreements
         if Leaseholder.exists?(user_id: params[:id])
           leaseholder = Leaseholder.where(user_id: params[:id])[0]
-          agreements = RentalAgreement.where(leaseholder_id: leaseholder.user_id, status: %w[pending denied])
+          agreements = RentalAgreement.where(leaseholder_id: leaseholder.id, status: %w[pending denied])
         else
           lessor = Lessor.where(user_id: params[:id])[0]
-          agreements = RentalAgreement.where(lessor_id: lessor.user_id, status: %w[pending denied])
+          agreements = RentalAgreement.where(lessor_id: lessor.id, status: %w[pending denied])
         end
         agreements_list = add_leaseholder_and_lessor_to_rental_agreements(agreements)
         render json: { RentalAgreements: agreements_list }, status: :ok
@@ -150,14 +150,14 @@ module Api
 
       def user_rental_agreements_leaseholder
         leaseholder = Leaseholder.where(user_id: params[:id])[0]
-        agreements = RentalAgreement.where(leaseholder_id: leaseholder.user_id, status: 'approved')
+        agreements = RentalAgreement.where(leaseholder_id: leaseholder.id, status: 'approved')
         agreements = merge_lessor_to_rental_agreements(agreements)
         render json: { RentalAgreements: agreements, leaseholder: leaseholder.attributes.merge(user: leaseholder.user.attributes) }, status: :ok
       end
 
       def user_rental_agreements_lessor
         lessor = Lessor.where(user_id: params[:id])[0]
-        agreements = RentalAgreement.where(lessor_id: lessor.user_id, status: 'approved')
+        agreements = RentalAgreement.where(lessor_id: lessor.id, status: 'approved')
         agreements = merge_leaseholder_to_rental_agreements(agreements)
         render json: { RentalAgreements: agreements, lessor: lessor.attributes.merge(user: lessor.user.attributes) }, status: :ok
       end
