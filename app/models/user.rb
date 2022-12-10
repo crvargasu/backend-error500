@@ -8,4 +8,6 @@ class User < ApplicationRecord
 
   has_one :leaseholder, required: false, dependent: :destroy
   has_one :lessor, required: false, dependent: :destroy
+
+  enum role: { basic: 0, admin: 1 }
 end
