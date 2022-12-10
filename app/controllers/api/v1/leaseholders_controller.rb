@@ -9,7 +9,7 @@ module Api
       # GET /api/v1/leaseholders
       # GET /api/v1/leaseholders.json
       def index
-        @api_v1_leaseholders = Leaseholder.all
+        @api_v1_leaseholders = Leaseholder.where(status: true)
         @api_v1_leaseholder_validity = []
         @api_v1_leaseholders.each do |leaseholder|
           calculate_mean_reviews(leaseholder.user_id)
