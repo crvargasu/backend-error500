@@ -17,8 +17,8 @@ RSpec.describe 'LeaseholdersController', type: :request do # rubocop:disable Met
         expect(response).to have_http_status(:ok)
       end
 
-      it 'returns 3 rental_agreements' do
-        expect(JSON.parse(response.body).length).to eq(0)
+      it 'returns 3 leaseholders' do
+        expect(JSON.parse(response.body).length).to eq(3)
       end
     end
   end
@@ -124,61 +124,6 @@ RSpec.describe 'LeaseholdersController', type: :request do # rubocop:disable Met
 
       it 'return status 404' do
         expect(response).to have_http_status(:not_found)
-      end
-    end
-  end
-
-  describe 'GET /api/v1/polygon/:id' do
-    let(:user) { create(:user) }
-    let(:auth) { auth_headers(user) }
-    let!(:leaseholder) { create(:leaseholder, user: user, polygon: '785') }
-
-    let(:user_with_no_leaseholder) { create(:user) }
-    let(:auth2) { auth_headers(user_with_no_leaseholder) }
-
-    context 'when leaseholder exists' do
-      before do
-        get "/api/v1/polygon/#{user.id}", headers: auth
-      end
-
-      it 'return status 200' do
-        expect(response).to have_http_status(:ok)
-      end
-
-      it 'returns polygon' do
-        parsed_response = JSON.parse(response.body)
-        expect(parsed_response['polygon']).to eq(leaseholder.polygon)
-      end
-    end
-
-    context 'when leaseholder does not exist' do
-      before do
-        get "/api/v1/polygon/#{user_with_no_leaseholder.id}", headers: auth2
-      end
-
-      it 'return status 404' do
-        expect(response).to have_http_status(:not_found)
-      end
-    end
-  end
-
-  describe 'GET /api/v1/polygons' do
-    let(:user) { create(:user) }
-    let(:auth) { auth_headers(user) }
-    let!(:leaseholder) { create_list(:leaseholder, 5) }
-
-    context 'when leaseholder exists' do
-      before do
-        get '/api/v1/polygons', headers: auth
-      end
-
-      it 'return status 200' do
-        expect(response).to have_http_status(:ok)
-      end
-
-      it 'returns polygon' do
-        parsed_response = JSON.parse(response.body)
-        expect(parsed_response['polygons'].length).to eq(5)
       end
     end
   end
