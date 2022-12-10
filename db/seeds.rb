@@ -72,3 +72,9 @@ end
     days_for_week: 3
   )
 end
+
+User.create(
+  email: 'admin@example.com',
+  password: 'admin123',
+  role: 'admin'
+)
