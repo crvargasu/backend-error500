@@ -10,11 +10,12 @@ module Api
       # GET /api/v1/leaseholders.json
       def index
         @api_v1_leaseholders = Leaseholder.all
+        @api_v1_leaseholder_validity = []
         @api_v1_leaseholders.each do |leaseholder|
           calculate_mean_reviews(leaseholder.user_id)
+          calculate_validity(leaseholder)
         end
-
-        render json: @api_v1_leaseholders.to_json(include: [:user])
+        render json: @api_v1_leaseholder_validity.to_json(include: %i[user rental_agreements])
       end
 
       # GET /api/v1/leaseholders/1
@@ -101,6 +102,15 @@ module Api
         mean_score /= leaseholder.reviews.length.to_f if leaseholder.reviews.length.positive?
         mean_score = mean_score.round
         leaseholder.update(mean_reviews: mean_score)
+      end
+
+      def calculate_validity(leaseholder)
+        current_timestamp = Time.zone.now.getutc
+        agreements = RentalAgreement.where('timestamp_start < ?',
+                                           current_timestamp).where(leaseholder_id: leaseholder.user_id,
+                                                                    status: 'approved')
+        space = leaseholder.capacity - agreements.count
+        @api_v1_leaseholder_validity << leaseholder if space.positive?
       end
     end
   end
