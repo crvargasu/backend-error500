@@ -5,8 +5,14 @@ module Users
     ActionController::Parameters.permit_all_parameters = true
     include RackSessionFix
     respond_to :json
+
     def create
       super do |user|
+        if params[:user][:type] == 'admin'
+          user.update(role: 'admin')
+          return
+        end
+
         params[:user][:others][:user_id] = user.id
         if params[:user][:type] == 'lessor'
           @api_v1_lessor = Lessor.new(params[:user][:others])
