@@ -21,12 +21,10 @@ module Api
       # GET /api/v1/leaseholders/pending/all
       def pending_leaseholders
         @api_v1_leaseholders = Leaseholder.where(status: false)
-        @api_v1_leaseholder_validity = []
         @api_v1_leaseholders.each do |leaseholder|
           calculate_mean_reviews(leaseholder.user_id)
-          calculate_validity(leaseholder)
         end
-        render json: @api_v1_leaseholder_validity.to_json(include: %i[user rental_agreements]), status: :ok
+        render json: @api_v1_leaseholders.to_json(include: %i[user rental_agreements]), status: :ok
       end
 
       # GET /api/v1/leaseholders/1
