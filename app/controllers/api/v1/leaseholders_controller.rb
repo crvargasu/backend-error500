@@ -69,11 +69,6 @@ module Api
         end
       end
 
-      def polygons
-        @leaseholders = Leaseholder.all
-        polygons = @leaseholders.map(&:polygon)
-        render json: { polygons: polygons }, status: :ok
-      end
 
       # DELETE /api/v1/leaseholders/1
       # DELETE /api/v1/leaseholders/1.json

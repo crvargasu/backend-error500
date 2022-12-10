@@ -136,25 +136,4 @@ RSpec.describe 'LeaseholdersController', type: :request do # rubocop:disable Met
       end
     end
   end
-
-  describe 'GET /api/v1/polygons' do
-    let(:user) { create(:user) }
-    let(:auth) { auth_headers(user) }
-    let!(:leaseholder) { create_list(:leaseholder, 5) }
-
-    context 'when leaseholder exists' do
-      before do
-        get '/api/v1/polygons', headers: auth
-      end
-
-      it 'return status 200' do
-        expect(response).to have_http_status(:ok)
-      end
-
-      it 'returns polygon' do
-        parsed_response = JSON.parse(response.body)
-        expect(parsed_response['polygons'].length).to eq(5)
-      end
-    end
-  end
 end
