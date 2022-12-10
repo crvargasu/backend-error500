@@ -110,7 +110,7 @@ module Api
                                            current_timestamp).where(leaseholder_id: leaseholder.user_id,
                                                                     status: 'approved')
         space = leaseholder.capacity - agreements.count
-        @api_v1_leaseholder_validity << leaseholder if space > 0
+        @api_v1_leaseholder_validity << leaseholder if space.positive?
       end
     end
   end
