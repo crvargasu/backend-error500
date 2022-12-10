@@ -17,8 +17,33 @@ RSpec.describe 'LeaseholdersController', type: :request do # rubocop:disable Met
         expect(response).to have_http_status(:ok)
       end
 
-      it 'returns 3 rental_agreements' do
+      it 'returns 3 leaseholders' do
         expect(JSON.parse(response.body).length).to eq(3)
+      end
+    end
+  end
+
+  describe 'GET /api/v1/leaseholders/pending/all' do
+    let(:user) { create(:user) }
+    let(:auth) { auth_headers(user) }
+    let!(:leaseholders) { create_list(:leaseholder, 3) }
+    let!(:pending_leaseholder) { create(:leaseholder, status: false) }
+
+    context 'when logged in' do
+      before do
+        get '/api/v1/leaseholders/pending/all', headers: auth
+      end
+
+      it 'return status 200' do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it 'returns 1 leaseholders' do
+        expect(JSON.parse(response.body).length).to eq(1)
+      end
+
+      it 'returns a leaseholder with status false' do
+        expect(JSON.parse(response.body)[0]['status']).to eq(false)
       end
     end
   end
