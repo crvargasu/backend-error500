@@ -18,7 +18,7 @@ RSpec.describe 'LeaseholdersController', type: :request do # rubocop:disable Met
       end
 
       it 'returns 3 rental_agreements' do
-        expect(JSON.parse(response.body).length).to eq(3)
+        expect(JSON.parse(response.body).length).to eq(0)
       end
     end
   end
