@@ -12,7 +12,7 @@ module Api
         @api_v1_leaseholders = Leaseholder.where(status: true)
         @api_v1_leaseholder_validity = []
         @api_v1_leaseholders.each do |leaseholder|
-          calculate_mean_reviews(leaseholder.user_id)
+          calculate_mean_reviews(leaseholder)
           calculate_validity(leaseholder)
         end
         render json: @api_v1_leaseholder_validity.to_json(include: %i[user rental_agreements])
@@ -22,7 +22,7 @@ module Api
       def pending_leaseholders
         @api_v1_leaseholders = Leaseholder.where(status: false)
         @api_v1_leaseholders.each do |leaseholder|
-          calculate_mean_reviews(leaseholder.user_id)
+          calculate_mean_reviews(leaseholder)
         end
         render json: @api_v1_leaseholders.to_json(include: %i[user rental_agreements]), status: :ok
       end
@@ -31,8 +31,8 @@ module Api
       # GET /api/v1/leaseholders/1.json
       def show
         if Leaseholder.exists?(user_id: params[:id])
-          calculate_mean_reviews(params[:id])
           leaseholder = Leaseholder.where(user_id: params[:id])[0]
+          calculate_mean_reviews(leaseholder)
           user = User.find(params[:id])
           render json: { user: user, other: leaseholder }, status: :ok
         else
@@ -72,7 +72,9 @@ module Api
       # DELETE /api/v1/leaseholders/1
       # DELETE /api/v1/leaseholders/1.json
       def destroy
-        @api_v1_leaseholder.destroy
+        @api_v1_leaseholder = Leaseholder.find(params[:id])
+        @api_v1_leaseholder.update(status: false)
+        render json: { message: 'Leaseholder destroyed' }, status: :ok
       end
 
       private
@@ -87,8 +89,7 @@ module Api
         params.require(:api_v1_leaseholder).permit(:title, :content)
       end
 
-      def calculate_mean_reviews(id)
-        leaseholder = Leaseholder.where(user_id: id)[0]
+      def calculate_mean_reviews(leaseholder)
         mean_score = 0
         leaseholder.reviews.each do |l|
           mean_score += l.score
@@ -101,9 +102,12 @@ module Api
       def calculate_validity(leaseholder)
         current_timestamp = Time.zone.now.getutc
         agreements = RentalAgreement.where('timestamp_start < ?',
-                                           current_timestamp).where(leaseholder_id: leaseholder.user_id,
-                                                                    status: 'approved')
-        space = leaseholder.capacity - agreements.count
+                                           current_timestamp).where(leaseholder_id: leaseholder.id, status: 'approved')
+        space = if agreements.exists?
+                  leaseholder.capacity - agreements.count
+                else
+                  leaseholder.capacity
+                end
         @api_v1_leaseholder_validity << leaseholder if space.positive?
       end
     end
