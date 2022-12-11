@@ -58,6 +58,7 @@ module Api
       def destroy
         @api_v1_lessor = Lessor.find(params[:id])
         @api_v1_lessor.destroy
+        render json: { message: 'Lessor destroyed' }, status: :ok
       end
 
       private
