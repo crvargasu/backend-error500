@@ -216,4 +216,60 @@ RSpec.describe 'RentalAgreementsController', type: :request do # rubocop:disable
       end
     end
   end
+  describe 'PATCH /api/v1/reviews/:id' do
+    let(:user) { create(:user) }
+    let(:auth) { auth_headers(user) }
+    let!(:rental_agreement) { create(:rental_agreement, offer_price: 10_000) }
+
+    context 'when logged in' do
+      before do
+        params = {
+          api_v1_rental_agreement: {
+            offer_price: 20_000
+          }
+        }
+        patch "/api/v1/rental_agreements/#{rental_agreement.id}", headers: auth, params: params.to_json
+        rental_agreement.reload
+      end
+
+      it 'return status 200' do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it 'returns updated review score' do
+        expect(rental_agreement.offer_price).to eq(20_000)
+      end
+    end
+  end
+  describe 'POST /api/v1/rental_agreements' do # rubocop:disable Metrics/BlockLength
+    let(:user) { create(:user) }
+    let(:auth) { auth_headers(user) }
+    let!(:lessor) { create(:lessor) }
+    let!(:leaseholder) { create(:leaseholder) }
+
+    context 'when logged in' do
+      before do
+        params = {
+          api_v1_rental_agreement: {
+            timestamp_start: '2022-12-10 00:00:00',
+            timestamp_end: '2022-12-11 23:00:00',
+            lessor_id: lessor.id,
+            leaseholder_id: leaseholder.id,
+            offer_price: 5555.55,
+            days_for_week: 3,
+            reasons: 'just for testing'
+          }
+        }
+        post '/api/v1/rental_agreements/', headers: auth, params: params.to_json
+      end
+
+      it 'return status 200' do
+        expect(response).to have_http_status(:created)
+      end
+
+      it 'returns created rental agreement' do
+        expect(RentalAgreement.last.offer_price).to eq(5555.55)
+      end
+    end
+  end
 end
