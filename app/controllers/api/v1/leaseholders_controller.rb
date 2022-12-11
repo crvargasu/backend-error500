@@ -22,7 +22,7 @@ module Api
       def pending_leaseholders
         @api_v1_leaseholders = Leaseholder.where(status: false)
         @api_v1_leaseholders.each do |leaseholder|
-          calculate_mean_reviews(leaseholder.user_id)
+          calculate_mean_reviews(leaseholder)
         end
         render json: @api_v1_leaseholders.to_json(include: %i[user rental_agreements]), status: :ok
       end
@@ -31,8 +31,8 @@ module Api
       # GET /api/v1/leaseholders/1.json
       def show
         if Leaseholder.exists?(user_id: params[:id])
-          calculate_mean_reviews(params[:id])
           leaseholder = Leaseholder.where(user_id: params[:id])[0]
+          calculate_mean_reviews(leaseholder)
           user = User.find(params[:id])
           render json: { user: user, other: leaseholder }, status: :ok
         else
