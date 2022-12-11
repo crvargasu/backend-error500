@@ -23,6 +23,26 @@ RSpec.describe 'ReviewsController', type: :request do # rubocop:disable Metrics/
     end
   end
 
+  describe 'GET /api/v1/reviews/:id' do
+    let(:user) { create(:user) }
+    let(:auth) { auth_headers(user) }
+    let!(:review) { create(:review) }
+
+    context 'when logged in' do
+      before do
+        get "/api/v1/reviews/#{review.id}", headers: auth
+      end
+
+      it 'return status 200' do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it 'returns correct review' do
+        expect(JSON.parse(response.body)['id']).to eq(review.id)
+      end
+    end
+  end
+
   describe 'POST /api/v1/reviews' do # rubocop:disable Metrics/BlockLength
     let(:user) { create(:user) }
     let(:auth) { auth_headers(user) }
@@ -72,6 +92,50 @@ RSpec.describe 'ReviewsController', type: :request do # rubocop:disable Metrics/
 
       it 'return status 422' do
         expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+  end
+  describe 'PATCH /api/v1/reviews/:id' do
+    let(:user) { create(:user) }
+    let(:auth) { auth_headers(user) }
+    let!(:review) { create(:review, score: 1) }
+
+    context 'when logged in' do
+      before do
+        params = {
+          api_v1_review: {
+            score: 2
+          }
+        }
+        patch "/api/v1/reviews/#{review.id}", headers: auth, params: params.to_json
+        review.reload
+      end
+
+      it 'return status 200' do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it 'returns updated review score' do
+        expect(review.score).to eq(2)
+      end
+    end
+  end
+  describe 'DESTROY /api/v1/reviews/:id' do
+    let(:user) { create(:user) }
+    let(:auth) { auth_headers(user) }
+    let!(:review) { create(:review) }
+
+    context 'when logged in' do
+      before do
+        delete "/api/v1/reviews/#{review.id}", headers: auth
+      end
+
+      it 'return status 200' do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it 'destroys review' do
+        expect(Review.exists?(review.id)).to eq(false)
       end
     end
   end
