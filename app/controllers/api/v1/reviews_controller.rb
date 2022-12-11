@@ -15,7 +15,9 @@ module Api
 
       # GET /api/v1/reviews/1
       # GET /api/v1/reviews/1.json
-      def show; end
+      def show
+        render json: @api_v1_review
+      end
 
       # POST /api/v1/reviews
       # POST /api/v1/reviews.json
@@ -46,7 +48,7 @@ module Api
       # PATCH/PUT /api/v1/reviews/1.json
       def update
         if @api_v1_review.update(api_v1_review_params)
-          render :show, status: :ok, location: @api_v1_review
+          render json: { message: 'Rental Agreement updated' }, status: :ok
         else
           render json: @api_v1_review.errors, status: :unprocessable_entity
         end
@@ -56,6 +58,7 @@ module Api
       # DELETE /api/v1/reviews/1.json
       def destroy
         @api_v1_review.destroy
+        render json: { message: 'Review destroyed' }, status: :ok
       end
 
       private

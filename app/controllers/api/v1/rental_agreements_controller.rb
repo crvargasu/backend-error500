@@ -112,12 +112,6 @@ module Api
         end
       end
 
-      # DELETE /api/v1/rental_agreements/1
-      # DELETE /api/v1/rental_agreements/1.json
-      def destroy
-        @api_v1_rental_agreement.destroy
-      end
-
       private
 
       # Use callbacks to share common setup or constraints between actions.
