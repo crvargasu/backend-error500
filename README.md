@@ -1,13 +1,10 @@
-# README
+# Backend ERROR 500
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# Documentation
+https://documenter.getpostman.com/view/13219855/2s847ESa97
 
-Things you may want to cover:
-
-* Ruby version 2.7.6
-Run in db
-
-`psql -U postgres dockerized-rails_development`
-
-`CREATE EXTENSION postgis;`
+# How to run
+```
+docker-compose build
+docker-compose up
+```
