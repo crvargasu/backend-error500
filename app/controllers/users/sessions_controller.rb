@@ -11,7 +11,7 @@ module Users
     end
 
     def respond_to_on_destroy
-      current_user ? log_out_failure : log_out_success
+      current_user ? log_out_success : log_out_failure
     end
 
     def log_in_success
