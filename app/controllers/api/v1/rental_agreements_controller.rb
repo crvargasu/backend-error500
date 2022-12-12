@@ -56,6 +56,17 @@ module Api
       def create
         @api_v1_rental_agreement = RentalAgreement.new(api_v1_rental_agreement_params)
         @api_v1_rental_agreement.status = 0
+        if Leaseholder.exists?(user_id: current_user.id)
+          if current_user.leaseholder.id != @api_v1_rental_agreement.leaseholder_id
+            return render json: { message: 'Id usuario no coincide con usuario loggeado' }, status: :bad_request
+          end
+        end
+
+        if Lessor.exists?(user_id: current_user.id)
+          if current_user.lessor.id != @api_v1_rental_agreement.lessor_id
+            return render json: { message: 'Id usuario no coincide con usuario loggeado' }, status: :bad_request
+          end
+        end
 
         if @api_v1_rental_agreement.save
           render json: @api_v1_rental_agreement, status: :created
